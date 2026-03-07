@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publicar en GitHub Pages — PAS Forestal SOFFS-PA</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:     #08100d;
+  --bg2:    #0f1f16;
+  --bg3:    #162b1e;
+  --green:  #22c55e;
+  --glow:   #16a34a;
+  --lime:   #a3e635;
+  --gold:   #fbbf24;
+  --red:    #f87171;
+  --blue:   #60a5fa;
+  --text:   #f0fdf4;
+  --text2:  #bbf7d0;
+  --text3:  #6ee7b7;
+  --muted:  #4b7a5e;
+  --border: rgba(34,197,94,0.15);
+  --r:      14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Sora',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── GRID NOISE ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(34,197,94,0.04) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(34,197,94,0.04) 40px);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 20%, rgba(22,163,74,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(251,191,36,0.06) 0%, transparent 50%);
+}
+
+.wrap{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:32px 24px 80px;}
+
+/* ── HEADER ── */
+.hero{text-align:center;padding:48px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Fira Code',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);border:1px solid rgba(34,197,94,0.3);
+  border-radius:20px;padding:5px 14px;margin-bottom:20px;
+  background:rgba(34,197,94,0.06);
+}
+.hero-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5);}50%{box-shadow:0 0 0 8px rgba(34,197,94,0);}}
+
+.hero h1{
+  font-size:clamp(26px,4vw,40px);font-weight:800;
+  color:var(--text);line-height:1.1;letter-spacing:-1px;margin-bottom:12px;
+}
+.hero h1 span{
+  color:var(--green);
+  text-shadow:0 0 40px rgba(34,197,94,0.4);
+}
+.hero-sub{font-size:14px;color:var(--text3);line-height:1.6;max-width:560px;margin:0 auto;}
+
+/* ── SECCIÓN ── */
+.section{margin-bottom:36px;}
+.section-head{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:20px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.section-num{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--glow),var(--green));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fira Code',monospace;font-size:13px;font-weight:600;
+  color:#fff;
+}
+.section-title{font-size:17px;font-weight:700;color:var(--text);}
+.section-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── PASOS ── */
+.step{
+  display:grid;grid-template-columns:44px 1fr;gap:0;
+  margin-bottom:4px;
+  animation:fadeIn 0.4s ease both;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-12px);}to{opacity:1;transform:none;}}
+
+.step-line{
+  display:flex;flex-direction:column;align-items:center;
+}
+.step-circle{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  border:2px solid var(--green);background:rgba(34,197,94,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fira Code',monospace;font-size:12px;font-weight:600;
+  color:var(--green);z-index:1;position:relative;
+  transition:all 0.3s;
+}
+.step-circle.done{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 0 16px rgba(34,197,94,0.4);}
+.step-circle.done::after{content:'✓';}
+.step-connector{width:2px;flex:1;background:var(--border);margin:4px 0;min-height:16px;}
+
+.step-body{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 18px;
+  margin-bottom:8px;margin-left:8px;
+  transition:border-color 0.3s;
+}
+.step-body.active{border-color:rgba(34,197,94,0.4);background:rgba(34,197,94,0.04);}
+.step-body.done-step{border-color:rgba(34,197,94,0.2);opacity:0.7;}
+
+.step-label{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.step-desc{font-size:12.5px;color:var(--text3);line-height:1.6;}
+.step-desc strong{color:var(--text);}
+
+/* ── CÓDIGO ── */
+.code-block{
+  background:#060e09;border:1px solid rgba(34,197,94,0.2);
+  border-radius:10px;padding:14px 16px;margin:10px 0;
+  font-family:'Fira Code',monospace;font-size:12.5px;
+  color:var(--lime);line-height:1.7;
+  position:relative;overflow-x:auto;
+}
+.code-block .comment{color:var(--muted);}
+.code-block .kw{color:var(--gold);}
+.code-block .str{color:var(--green);}
+.code-copy{
+  position:absolute;top:10px;right:10px;
+  background:rgba(34,197,94,0.1);border:1px solid var(--border);
+  border-radius:6px;padding:4px 10px;
+  font-family:'Fira Code',monospace;font-size:10px;color:var(--green);
+  cursor:pointer;transition:all 0.2s;
+}
+.code-copy:hover{background:rgba(34,197,94,0.2);}
+
+/* ── ALERTA / TIP ── */
+.tip{
+  display:flex;gap:12px;align-items:flex-start;
+  background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);
+  border-radius:10px;padding:14px 16px;margin:10px 0;
+  font-size:12.5px;color:var(--text3);line-height:1.6;
+}
+.tip-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.tip strong{color:var(--gold);}
+
+.tip-green{background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.2);}
+.tip-green strong{color:var(--green);}
+
+/* ── BOTONES ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 20px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Sora',sans-serif;font-size:13px;font-weight:600;
+  transition:all 0.2s;text-decoration:none;
+}
+.btn-green{background:var(--green);color:#052e16;}
+.btn-green:hover{background:var(--lime);transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,197,94,0.3);}
+.btn-outline{background:transparent;color:var(--green);border:1px solid var(--border);}
+.btn-outline:hover{background:rgba(34,197,94,0.08);}
+
+/* ── CHECKBOX TRACKER ── */
+.tracker{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;margin-bottom:24px;
+}
+.tracker-title{font-size:13px;font-weight:600;color:var(--text3);margin-bottom:14px;
+  font-family:'Fira Code',monospace;letter-spacing:1px;text-transform:uppercase;}
+.check-row{
+  display:flex;align-items:center;gap:12px;
+  padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;
+  transition:background 0.2s;border-radius:6px;padding-left:4px;
+}
+.check-row:last-child{border-bottom:none;}
+.check-row:hover{background:rgba(34,197,94,0.04);}
+.chk{
+  width:20px;height:20px;border-radius:5px;
+  border:2px solid var(--muted);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;font-size:12px;color:#fff;
+}
+.chk.checked{background:var(--green);border-color:var(--green);}
+.check-label{font-size:13px;color:var(--text3);}
+.check-label.checked{color:var(--muted);text-decoration:line-through;}
+.progress-track{
+  height:6px;background:rgba(255,255,255,0.06);border-radius:3px;
+  margin-top:14px;overflow:hidden;
+}
+.progress-bar-inner{
+  height:100%;background:linear-gradient(90deg,var(--glow),var(--green));
+  border-radius:3px;transition:width 0.4s cubic-bezier(.16,1,.3,1);
+}
+.progress-pct{font-family:'Fira Code',monospace;font-size:10px;color:var(--green);
+  text-align:right;margin-top:4px;}
+
+/* ── QR GENERADOR ── */
+.qr-gen{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:24px;
+}
+.qr-gen-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.qr-gen-sub{font-size:12.5px;color:var(--text3);margin-bottom:18px;line-height:1.6;}
+
+.url-input-wrap{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.url-input{
+  flex:1;min-width:200px;
+  background:#060e09;border:1px solid var(--border);border-radius:10px;
+  color:var(--lime);font-family:'Fira Code',monospace;font-size:12px;
+  padding:11px 14px;outline:none;transition:border-color 0.2s;
+}
+.url-input:focus{border-color:rgba(34,197,94,0.5);}
+.url-input::placeholder{color:var(--muted);}
+
+.qr-result{
+  display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+  background:#060e09;border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;
+  display:none;
+}
+.qr-result.visible{display:flex;}
+.qr-canvas-wrap{
+  background:white;border-radius:10px;padding:10px;flex-shrink:0;
+}
+.qr-canvas-wrap canvas{display:block;}
+.qr-data{}
+.qr-data-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.qr-data-url{font-family:'Fira Code',monospace;font-size:11px;color:var(--green);
+  word-break:break-all;margin-bottom:12px;line-height:1.6;}
+.qr-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:8px;}
+
+/* ── OPCIONES RÁPIDAS ── */
+.quick-urls{margin-bottom:14px;}
+.quick-label{font-family:'Fira Code',monospace;font-size:10px;color:var(--muted);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.quick-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.quick-chip{
+  font-family:'Fira Code',monospace;font-size:10.5px;
+  background:rgba(34,197,94,0.06);border:1px solid var(--border);
+  border-radius:20px;padding:5px 12px;cursor:pointer;color:var(--text3);
+  transition:all 0.2s;
+}
+.quick-chip:hover{background:rgba(34,197,94,0.12);color:var(--green);border-color:rgba(34,197,94,0.3);}
+
+/* ── ARCHIVOS ── */
+.file-list{display:flex;flex-direction:column;gap:8px;}
+.file-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+}
+.file-icon{font-size:20px;flex-shrink:0;}
+.file-name{font-family:'Fira Code',monospace;font-size:12px;color:var(--lime);flex:1;}
+.file-desc{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.file-badge{
+  font-family:'Fira Code',monospace;font-size:9.5px;
+  padding:3px 9px;border-radius:20px;flex-shrink:0;
+}
+.badge-req{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
+.badge-opt{background:rgba(96,165,250,0.10);color:var(--blue);border:1px solid rgba(96,165,250,0.2);}
+
+/* ── MOBILE ── */
+@media(max-width:580px){
+  .wrap{padding:16px 14px 60px;}
+  .step{grid-template-columns:36px 1fr;}
+  .url-input-wrap{flex-direction:column;}
+  .qr-result{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">
+    <span class="hero-dot"></span>
+    Guía de Publicación · SOFFS-PA · 2024
+  </div>
+  <h1>Publicar en <span>GitHub Pages</span><br>y compartir con QR</h1>
+  <p class="hero-sub">
+    Guía paso a paso para publicar el Dashboard PAS Forestal y el Agente Expositor en internet de forma gratuita y permanente, accesible desde cualquier dispositivo móvil o computador.
+  </p>
+</div>
+
+<!-- TRACKER DE PROGRESO -->
+<div class="tracker">
+  <div class="tracker-title">📋 Progreso de configuración</div>
+  <div id="checkList">
+    <div class="check-row" onclick="toggleCheck(0)">
+      <div class="chk" id="chk-0"></div>
+      <span class="check-label" id="lbl-0">Crear cuenta en GitHub</span>
+    </div>
+    <div class="check-row" onclick="toggleCheck(1)">
+      <div class="chk" id="chk-1"></div>
+      <span class="check-label" id="lbl-1">Crear repositorio público</span>
+    </div>
+    <div class="check-row" onclick="toggleCheck(2)">
+      <div class="chk" id="chk-2"></div>
+      <span class="check-label" id="lbl-2">Subir los archivos HTML</span>
+    </div>
+    <div class="check-row" onclick="toggleCheck(3)">
+      <div class="chk" id="chk-3"></div>
+      <span class="check-label" id="lbl-3">Activar GitHub Pages</span>
+    </div>
+    <div class="check-row" onclick="toggleCheck(4)">
+      <div class="chk" id="chk-4"></div>
+      <span class="check-label" id="lbl-4">Copiar el enlace y generar QR</span>
+    </div>
+    <div class="check-row" onclick="toggleCheck(5)">
+      <div class="chk" id="chk-5"></div>
+      <span class="check-label" id="lbl-5">Compartir por WhatsApp / correo</span>
+    </div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
+  </div>
+  <div class="progress-pct" id="progressPct">0 / 6 pasos completados</div>
+</div>
+
+<!-- ARCHIVOS A SUBIR -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">📁</div>
+    <div>
+      <div class="section-title">Archivos a publicar</div>
+      <div class="section-sub">Tienes estos 3 archivos — súbelos todos al repositorio</div>
+    </div>
+  </div>
+  <div class="file-list">
+    <div class="file-item">
+      <div class="file-icon">📊</div>
+      <div>
+        <div class="file-name">Dashboard_PAS_Exposicion_JCV.html</div>
+        <div class="file-desc">Dashboard principal con todos los gráficos, datos y análisis PAS</div>
+      </div>
+      <span class="file-badge badge-req">Requerido</span>
+    </div>
+    <div class="file-item">
+      <div class="file-icon">🎙</div>
+      <div>
+        <div class="file-name">Agente_Expositor_PAS_Forestal.html</div>
+        <div class="file-desc">Presentación automática con voz — 11 secciones narradas</div>
+      </div>
+      <span class="file-badge badge-req">Requerido</span>
+    </div>
+    <div class="file-item">
+      <div class="file-icon">📄</div>
+      <div>
+        <div class="file-name">index.html</div>
+        <div class="file-desc">Página de inicio que enlaza los dos archivos anteriores (la creamos abajo)</div>
+      </div>
+      <span class="file-badge badge-opt">Recomendado</span>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 1 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Crear cuenta en GitHub</div>
+      <div class="section-sub">Gratis · 2 minutos · No requiere tarjeta</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">a</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">🌐 Ir a GitHub.com</div>
+      <div class="step-desc">Abrir <strong>https://github.com</strong> en el navegador y hacer clic en <strong>"Sign up"</strong> (esquina superior derecha).</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">b</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">📧 Registrarse con correo</div>
+      <div class="step-desc">Ingresar correo electrónico, crear contraseña y elegir un nombre de usuario. <strong>Recomendado:</strong> usar un nombre profesional como <strong>javier-vela-forestal</strong> ya que formará parte de la URL pública.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">c</div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">✉️ Verificar el correo</div>
+      <div class="step-desc">Revisar la bandeja de entrada y hacer clic en el enlace de verificación que GitHub envía. Luego iniciar sesión.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-icon">💡</div>
+    <div>La cuenta de GitHub es <strong>gratuita y permanente</strong>. El plan Free incluye GitHub Pages sin costo. No necesitas pagar nada.</div>
+  </div>
+</div>
+
+<!-- PASO 2 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Crear el repositorio</div>
+      <div class="section-sub">El repositorio es la carpeta donde vivirán tus archivos</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">a</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">➕ Nuevo repositorio</div>
+      <div class="step-desc">Una vez dentro de GitHub, hacer clic en el botón verde <strong>"New"</strong> o en el ícono <strong>+</strong> de la barra superior → <strong>"New repository"</strong>.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">b</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">🏷️ Configurar el repositorio</div>
+      <div class="step-desc">Completar el formulario con exactamente estos datos:</div>
+      <div class="code-block">
+        <span class="comment"># Nombre del repositorio (sin espacios, sin tildes)</span><br>
+        Repository name: <span class="str">pas-forestal-soffs-pa</span><br><br>
+        <span class="comment"># Descripción opcional</span><br>
+        Description: <span class="str">Sistema PAS Forestal - SOFFS-PA Padre Abad 2024</span><br><br>
+        <span class="comment"># MUY IMPORTANTE: marcar como Público</span><br>
+        Visibility: <span class="kw">⦿ Public</span>  <span class="comment">(NO Private)</span><br><br>
+        <span class="comment"># Marcar esta casilla</span><br>
+        <span class="kw">☑</span> Add a README file
+      </div>
+      <button class="code-copy" onclick="copyText('pas-forestal-soffs-pa')">Copiar nombre</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">c</div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">✅ Crear el repositorio</div>
+      <div class="step-desc">Hacer clic en el botón verde <strong>"Create repository"</strong> al final de la página.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 3 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Subir los archivos HTML</div>
+      <div class="section-sub">Sin instalar nada — directo desde el navegador</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">a</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">📤 Subir archivos</div>
+      <div class="step-desc">Dentro del repositorio recién creado, hacer clic en <strong>"Add file"</strong> → <strong>"Upload files"</strong>.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">b</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">🖱️ Arrastrar y soltar los archivos</div>
+      <div class="step-desc">Arrastrar los tres archivos al área de carga, o hacer clic en <strong>"choose your files"</strong> para seleccionarlos desde la carpeta donde los guardaste (normalmente el Escritorio o Descargas).</div>
+      <div class="tip tip-green">
+        <div class="tip-icon">📁</div>
+        <div>Los archivos están en tu carpeta <strong>Descargas</strong> o donde los guardaste desde Claude. Subir los <strong>3 archivos juntos</strong> de una sola vez.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">c</div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">💾 Confirmar la subida</div>
+      <div class="step-desc">Bajar hasta el final de la página y hacer clic en el botón verde <strong>"Commit changes"</strong>. Los archivos quedarán guardados.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 4 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Activar GitHub Pages</div>
+      <div class="section-sub">Este paso publica los archivos en internet con URL permanente</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">a</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">⚙️ Ir a Settings</div>
+      <div class="step-desc">Dentro del repositorio, hacer clic en la pestaña <strong>"Settings"</strong> (con ícono de engranaje) en la barra superior.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">b</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">📄 Sección Pages</div>
+      <div class="step-desc">En el menú izquierdo buscar <strong>"Pages"</strong> (bajo la sección "Code and automation") y hacer clic.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">c</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">🚀 Configurar la fuente</div>
+      <div class="step-desc">En la sección <strong>"Build and deployment"</strong>, configurar:</div>
+      <div class="code-block">
+        Source: <span class="kw">Deploy from a branch</span><br>
+        Branch: <span class="str">main</span> &nbsp; / &nbsp; <span class="str">root</span><br>
+        <span class="comment"># Luego clic en "Save"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">d</div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">⏳ Esperar 1-2 minutos</div>
+      <div class="step-desc">GitHub tarda entre 1 y 3 minutos en publicar. Recargar la página de Settings → Pages y aparecerá un recuadro verde con el mensaje <strong>"Your site is live at:"</strong> seguido de la URL pública.</div>
+      <div class="tip">
+        <div class="tip-icon">🎯</div>
+        <div>Tu URL tendrá este formato:<br>
+        <strong style="color:var(--lime);">https://TUNOMBREDEUSUARIO.github.io/pas-forestal-soffs-pa/</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 5 — QR GENERATOR -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Generar el código QR</div>
+      <div class="section-sub">Pega tu URL de GitHub Pages y genera el QR al instante</div>
+    </div>
+  </div>
+
+  <div class="qr-gen">
+    <div class="qr-gen-title">🔗 Generador de QR — PAS Forestal</div>
+    <div class="qr-gen-sub">
+      Una vez que tengas tu URL de GitHub Pages, pégala aquí y el QR se genera automáticamente. Puedes imprimirlo, enviarlo por WhatsApp o incluirlo en tu presentación PowerPoint.
+    </div>
+
+    <div class="quick-urls">
+      <div class="quick-label">Plantillas de URL — reemplaza TUNOMBRE:</div>
+      <div class="quick-grid">
+        <div class="quick-chip" onclick="fillUrl('https://TUNOMBRE.github.io/pas-forestal-soffs-pa/')">🏠 Página principal</div>
+        <div class="quick-chip" onclick="fillUrl('https://TUNOMBRE.github.io/pas-forestal-soffs-pa/Agente_Expositor_PAS_Forestal.html')">🎙 Agente Expositor</div>
+        <div class="quick-chip" onclick="fillUrl('https://TUNOMBRE.github.io/pas-forestal-soffs-pa/Dashboard_PAS_Exposicion_JCV.html')">📊 Dashboard</div>
+      </div>
+    </div>
+
+    <div class="url-input-wrap">
+      <input class="url-input" id="urlInput" type="url"
+        placeholder="https://tunombre.github.io/pas-forestal-soffs-pa/"
+        oninput="onUrlChange()">
+      <button class="btn btn-green" onclick="generateQR()">⚡ Generar QR</button>
+    </div>
+
+    <div class="qr-result" id="qrResult">
+      <div class="qr-canvas-wrap">
+        <canvas id="qrCanvas"></canvas>
+      </div>
+      <div class="qr-data">
+        <div class="qr-data-title">✅ QR generado correctamente</div>
+        <div class="qr-data-url" id="qrUrl"></div>
+        <div class="qr-actions">
+          <button class="btn btn-green btn-sm" onclick="downloadQR()">⬇ Descargar PNG</button>
+          <button class="btn btn-outline btn-sm" onclick="copyQRUrl()">📋 Copiar URL</button>
+          <button class="btn btn-outline btn-sm" onclick="shareWhatsApp()">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 6 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Compartir el QR</div>
+      <div class="section-sub">Formas recomendadas para distribuir el acceso</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">a</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">📱 WhatsApp — grupos institucionales</div>
+      <div class="step-desc">Enviar la URL directamente o el PNG del QR al grupo de trabajo del GORE Ucayali, SOFFS-PA o FEMA. El botón <strong>"💬 WhatsApp"</strong> del generador abre el chat directamente.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">b</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">📊 En la presentación PowerPoint</div>
+      <div class="step-desc">Descargar el PNG del QR e insertarlo en la última diapositiva de tu presentación con el texto: <em>"Escanea para acceder al sistema interactivo"</em>.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-line">
+      <div class="step-circle">c</div>
+    </div>
+    <div class="step-body">
+      <div class="step-label">🖨️ Imprimir para reuniones presenciales</div>
+      <div class="step-desc">Imprimir el QR en tamaño A5 o A4 y colocarlo sobre la mesa durante reuniones con autoridades del GORE Ucayali, Fiscalía o gerencias regionales.</div>
+    </div>
+  </div>
+
+  <div class="tip tip-green">
+    <div class="tip-icon">🌟</div>
+    <div><strong>Ventaja de GitHub Pages:</strong> El enlace es permanente y gratuito para siempre. Si actualizas los archivos HTML, los cambios se reflejan automáticamente en el mismo QR sin necesidad de generar uno nuevo.</div>
+  </div>
+</div>
+
+</div><!-- wrap -->
+
+<!-- QR LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/* ── TRACKER ── */
+const checks = [false,false,false,false,false,false];
+function toggleCheck(i){
+  checks[i] = !checks[i];
+  const chk = document.getElementById('chk-'+i);
+  const lbl = document.getElementById('lbl-'+i);
+  chk.classList.toggle('checked', checks[i]);
+  chk.textContent = checks[i] ? '✓' : '';
+  lbl.classList.toggle('checked', checks[i]);
+  const done = checks.filter(Boolean).length;
+  document.getElementById('progressBar').style.width = (done/6*100)+'%';
+  document.getElementById('progressPct').textContent = done+' / 6 pasos completados';
+}
+
+/* ── QR GENERATOR ── */
+let qrInstance = null;
+
+function fillUrl(url){
+  document.getElementById('urlInput').value = url;
+}
+
+function onUrlChange(){
+  // auto-generate si la URL parece completa
+  const v = document.getElementById('urlInput').value;
+  if(v.startsWith('https://') && v.includes('.github.io') && v.length > 30){
+    generateQR();
+  }
+}
+
+function generateQR(){
+  const url = document.getElementById('urlInput').value.trim();
+  if(!url || !url.startsWith('http')){
+    alert('Por favor ingresa una URL válida que empiece con https://');
+    return;
+  }
+
+  const canvas = document.getElementById('qrCanvas');
+  canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+
+  if(qrInstance){ try{ qrInstance.clear(); }catch(e){} }
+
+  try{
+    qrInstance = new QRCode(canvas, {
+      text:         url,
+      width:        160,
+      height:       160,
+      colorDark:    '#052e16',
+      colorLight:   '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H,
+    });
+    document.getElementById('qrUrl').textContent = url;
+    document.getElementById('qrResult').classList.add('visible');
+  } catch(e){
+    alert('Error generando QR. Verifica la URL.');
+  }
+}
+
+function downloadQR(){
+  const canvas = document.getElementById('qrCanvas').querySelector('canvas') ||
+                 document.getElementById('qrCanvas');
+  const img    = document.getElementById('qrCanvas').querySelector('img');
+
+  if(img){
+    // QRCode.js renders an <img>
+    const a = document.createElement('a');
+    a.href     = img.src;
+    a.download = 'QR_PAS_Forestal_SOFFS-PA.png';
+    a.click();
+  } else if(canvas && canvas.tagName==='CANVAS'){
+    const a = document.createElement('a');
+    a.href     = canvas.toDataURL('image/png');
+    a.download = 'QR_PAS_Forestal_SOFFS-PA.png';
+    a.click();
+  }
+}
+
+function copyQRUrl(){
+  const url = document.getElementById('urlInput').value.trim();
+  navigator.clipboard.writeText(url).then(()=>{
+    alert('✅ URL copiada al portapapeles');
+  }).catch(()=>{
+    prompt('Copia esta URL:', url);
+  });
+}
+
+function shareWhatsApp(){
+  const url = document.getElementById('urlInput').value.trim();
+  const msg = encodeURIComponent(
+    '📊 Sistema PAS Forestal — SOFFS-PA Padre Abad 2024\n\n' +
+    'Accede al Dashboard interactivo y al Agente Expositor:\n' +
+    url + '\n\n' +
+    'Ing. Javier Carlos Vela — Especialista Forestal PAS\nGORE Ucayali'
+  );
+  window.open('https://wa.me/?text='+msg,'_blank');
+}
+
+function copyText(txt){
+  navigator.clipboard.writeText(txt).then(()=>{
+    alert('✅ Copiado: '+txt);
+  }).catch(()=>{
+    prompt('Copia este texto:', txt);
+  });
+}
+</script>
+</body>
+</html>

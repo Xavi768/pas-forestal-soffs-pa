@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agente Expositor — PAS Forestal SOFFS-PA 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:    #0b1c10;
+  --ink-2:  #132b19;
+  --forest: #245c2e;
+  --moss:   #3a7d44;
+  --leaf:   #5cad6a;
+  --mist:   #9ecba7;
+  --fog:    #d0e8d4;
+  --cream:  #f4f0e6;
+  --gold:   #c9931a;
+  --gold-lt:#e8b84b;
+  --amber:  #d4620a;
+  --cobalt: #1a3a7c;
+  --text:   #eef4ef;
+  --text-2: #c2d6c7;
+  --text-3: #9dbfa6;
+  --line:   rgba(200,230,205,0.12);
+  --r:      16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── FONDO ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 5% 10%, rgba(36,92,46,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 95% 90%, rgba(11,28,16,0.95) 0%, transparent 60%);
+  pointer-events:none;
+}
+.ambient{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;animation:breathe 14s ease-in-out infinite alternate;}
+.a1{width:500px;height:400px;background:rgba(36,92,46,0.14);top:-60px;left:-60px;}
+.a2{width:350px;height:350px;background:rgba(201,147,26,0.06);bottom:5%;right:-5%;animation-delay:-6s;}
+@keyframes breathe{from{transform:scale(1);}to{transform:scale(1.1) translate(20px,25px);}}
+
+/* ── SHELL ── */
+.shell{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:28px 24px 60px;}
+
+/* ── HEADER ── */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:20px;border-bottom:1px solid var(--line);
+  margin-bottom:28px;
+}
+.brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(18px,2.5vw,26px);font-weight:700;
+  color:var(--cream);letter-spacing:-0.3px;
+}
+.brand span{color:var(--gold-lt);font-style:italic;}
+.top-meta{font-family:'Fira Code',monospace;font-size:10px;color:var(--text-3);letter-spacing:1.5px;text-align:right;line-height:1.6;}
+
+/* ── SLIDE VIEWER ── */
+.slide-viewer{
+  background:rgba(255,255,255,0.028);
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+  margin-bottom:20px;
+  position:relative;
+  min-height:340px;
+}
+
+/* Barra de progreso superior */
+.progress-bar{
+  height:3px;
+  background:rgba(255,255,255,0.06);
+  position:relative;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--forest),var(--gold),var(--leaf));
+  transition:width 0.6s cubic-bezier(.16,1,.3,1);
+  width:0%;
+}
+
+/* Slide content */
+.slide{
+  display:none;
+  padding:32px 36px 28px;
+  animation:fadeSlide 0.5s cubic-bezier(.16,1,.3,1) both;
+}
+.slide.active{display:block;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+
+.slide-num{
+  font-family:'Fira Code',monospace;font-size:9.5px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--leaf);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.slide-num::before{content:'';width:20px;height:1px;background:var(--leaf);}
+
+.slide-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,3vw,34px);font-weight:700;
+  color:var(--cream);line-height:1.1;margin-bottom:16px;
+  letter-spacing:-0.3px;
+}
+.slide-title em{color:var(--gold-lt);font-style:italic;}
+
+.slide-body{
+  font-size:14px;color:var(--text-2);line-height:1.72;
+  max-width:780px;
+}
+.slide-body strong{color:var(--cream);font-weight:600;}
+.slide-body .highlight{
+  color:var(--gold-lt);font-weight:600;
+  font-family:'Fira Code',monospace;font-size:13px;
+}
+
+/* Stats inline dentro del slide */
+.slide-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:12px;margin-top:20px;
+}
+.stat-box{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;text-align:center;
+}
+.stat-n{
+  font-family:'Outfit',sans-serif;
+  font-size:28px;font-weight:700;color:var(--cream);
+  line-height:1;margin-bottom:4px;
+}
+.stat-l{
+  font-family:'Fira Code',monospace;font-size:9px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);
+}
+
+/* Lista dentro de slide */
+.slide-list{list-style:none;margin-top:14px;}
+.slide-list li{
+  display:grid;grid-template-columns:24px 1fr;
+  gap:10px;margin-bottom:10px;align-items:start;
+  font-size:13px;color:var(--text-2);line-height:1.55;
+}
+.slide-list li::before{
+  content:attr(data-n);
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--gold);background:rgba(201,147,26,0.12);
+  border-radius:50%;width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+
+/* Barra mini en slide */
+.mini-bar-wrap{margin-top:16px;}
+.mini-bar-item{margin-bottom:10px;}
+.mini-bar-meta{display:flex;justify-content:space-between;margin-bottom:4px;}
+.mini-bar-lbl{font-size:12.5px;color:var(--text);}
+.mini-bar-val{font-family:'Fira Code',monospace;font-size:11.5px;color:var(--gold-lt);}
+.mini-bar-track{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.mini-bar-fill{height:100%;border-radius:3px;transform:scaleX(0);transform-origin:left;
+  animation:growX 1s cubic-bezier(.16,1,.3,1) var(--d,0.2s) forwards;}
+@keyframes growX{to{transform:scaleX(1);}}
+
+/* Slide portada especial */
+.slide-cover{
+  background:linear-gradient(135deg,rgba(36,92,46,0.25),rgba(11,28,16,0.8));
+  text-align:center;padding:48px 36px 40px;
+}
+.cover-logo{
+  font-family:'Fira Code',monospace;font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--leaf);margin-bottom:16px;
+}
+.cover-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,5vw,48px);font-weight:700;
+  color:var(--cream);line-height:1.08;margin-bottom:12px;
+}
+.cover-title em{color:var(--gold-lt);font-style:italic;display:block;}
+.cover-sub{font-size:14px;color:var(--text-2);margin-bottom:24px;line-height:1.6;}
+.cover-presenter{
+  display:inline-flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--line);border-radius:14px;
+  padding:14px 20px;
+}
+.cover-av{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--forest),var(--moss));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--cream);
+}
+.cover-av-info{text-align:left;}
+.cover-av-name{font-size:13.5px;font-weight:600;color:var(--cream);}
+.cover-av-role{font-size:11px;color:var(--leaf);margin-top:2px;}
+.cover-av-inst{font-size:10.5px;color:var(--text-3);}
+
+/* ── CONTROLES ── */
+.controls{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);border-radius:16px;
+  padding:16px 20px;margin-bottom:16px;
+  flex-wrap:wrap;
+}
+.btn{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 18px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
+  transition:all 0.2s;
+}
+.btn-primary{background:var(--moss);color:var(--cream);}
+.btn-primary:hover{background:var(--leaf);transform:translateY(-1px);}
+.btn-secondary{background:rgba(255,255,255,0.06);color:var(--text-2);border:1px solid var(--line);}
+.btn-secondary:hover{background:rgba(255,255,255,0.1);color:var(--cream);}
+.btn-danger{background:rgba(183,28,28,0.2);color:#ef9a9a;border:1px solid rgba(183,28,28,0.3);}
+.btn-danger:hover{background:rgba(183,28,28,0.35);}
+.btn:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
+
+.btn-icon{font-size:16px;}
+
+/* Velocidad */
+.speed-wrap{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.speed-label{font-family:'Fira Code',monospace;font-size:9.5px;color:var(--text-3);letter-spacing:1px;text-transform:uppercase;}
+.speed-select{
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--line);border-radius:8px;
+  color:var(--text);font-family:'Fira Code',monospace;font-size:11px;
+  padding:5px 10px;cursor:pointer;outline:none;
+}
+
+/* ── TEXTO QUE SE ESTÁ LEYENDO (karaoke) ── */
+.narration-box{
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(92,173,106,0.2);
+  border-radius:14px;padding:18px 20px;
+  margin-bottom:16px;
+  min-height:72px;
+  position:relative;
+  overflow:hidden;
+}
+.narration-box::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--leaf),var(--gold));
+  border-radius:3px 0 0 3px;
+}
+.narration-label{
+  font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--leaf);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.narration-text{
+  font-size:13.5px;color:var(--text);line-height:1.65;
+  transition:opacity 0.3s;
+}
+.narration-text.speaking{color:var(--cream);}
+
+/* Indicador de voz activa */
+.voice-wave{
+  display:inline-flex;align-items:center;gap:3px;height:16px;
+  vertical-align:middle;margin-left:6px;
+}
+.voice-wave span{
+  display:inline-block;width:3px;background:var(--leaf);
+  border-radius:2px;animation:wave 0.8s ease-in-out infinite;
+}
+.voice-wave span:nth-child(1){animation-delay:0s;height:8px;}
+.voice-wave span:nth-child(2){animation-delay:0.12s;height:14px;}
+.voice-wave span:nth-child(3){animation-delay:0.24s;height:10px;}
+.voice-wave span:nth-child(4){animation-delay:0.36s;height:6px;}
+.voice-wave span:nth-child(5){animation-delay:0.12s;height:12px;}
+@keyframes wave{0%,100%{transform:scaleY(0.5);}50%{transform:scaleY(1.2);}}
+.voice-wave.hidden{display:none;}
+
+/* ── ÍNDICE DE SLIDES ── */
+.slide-index{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;
+}
+.idx-btn{
+  font-family:'Fira Code',monospace;font-size:9.5px;
+  padding:5px 12px;border-radius:20px;cursor:pointer;
+  border:1px solid var(--line);background:rgba(255,255,255,0.03);
+  color:var(--text-3);transition:all 0.2s;letter-spacing:0.5px;
+}
+.idx-btn:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.idx-btn.current{background:var(--moss);color:var(--cream);border-color:var(--moss);}
+.idx-btn.done{border-color:rgba(92,173,106,0.3);color:var(--leaf);}
+
+/* ── QR PLACEHOLDER ── */
+.qr-section{
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--line);border-radius:16px;
+  padding:24px;display:flex;align-items:center;gap:24px;
+  margin-top:20px;
+}
+.qr-box{
+  width:100px;height:100px;border-radius:10px;
+  background:white;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;padding:8px;
+}
+.qr-box canvas{width:84px !important;height:84px !important;}
+.qr-info{}
+.qr-title{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:6px;}
+.qr-sub{font-size:12px;color:var(--text-2);line-height:1.6;}
+.qr-url{font-family:'Fira Code',monospace;font-size:11px;color:var(--gold-lt);margin-top:6px;word-break:break-all;}
+
+/* MOBILE */
+@media(max-width:600px){
+  .shell{padding:16px 14px 50px;}
+  .slide{padding:22px 18px 20px;}
+  .controls{gap:8px;}
+  .speed-wrap{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<div class="a1 ambient"></div>
+<div class="a2 ambient"></div>
+
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="brand">PAS Forestal <span>SOFFS-PA</span></div>
+    <div class="top-meta">
+      GORE UCAYALI · 2024<br>
+      Ley N° 29763 · D.S. 018-2015-MINAGRI
+    </div>
+  </div>
+
+  <!-- ÍNDICE -->
+  <div class="slide-index" id="slideIndex"></div>
+
+  <!-- SLIDE VIEWER -->
+  <div class="slide-viewer">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="slideContainer"></div>
+  </div>
+
+  <!-- NARRACIÓN ACTIVA -->
+  <div class="narration-box">
+    <div class="narration-label">
+      <span>🎙 Narración en curso</span>
+      <div class="voice-wave hidden" id="voiceWave">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="narration-text" id="narrationText">
+      Presiona <strong>▶ Iniciar Exposición</strong> para comenzar la presentación con voz automática.
+    </div>
+  </div>
+
+  <!-- CONTROLES -->
+  <div class="controls">
+    <button class="btn btn-primary" id="btnPlay" onclick="startPresentation()">
+      <span class="btn-icon">▶</span> Iniciar Exposición
+    </button>
+    <button class="btn btn-secondary" id="btnPause" onclick="togglePause()" disabled>
+      <span class="btn-icon">⏸</span> Pausar
+    </button>
+    <button class="btn btn-secondary" id="btnPrev" onclick="goSlide(-1)" disabled>
+      <span class="btn-icon">◀</span> Anterior
+    </button>
+    <button class="btn btn-secondary" id="btnNext" onclick="goSlide(1)" disabled>
+      <span class="btn-icon">▶</span> Siguiente
+    </button>
+    <button class="btn btn-danger" id="btnStop" onclick="stopPresentation()" disabled>
+      <span class="btn-icon">⏹</span> Detener
+    </button>
+    <div class="speed-wrap">
+      <span class="speed-label">Velocidad</span>
+      <select class="speed-select" id="speedSelect" onchange="changeSpeed()">
+        <option value="0.8">Lenta</option>
+        <option value="1.0" selected>Normal</option>
+        <option value="1.25">Rápida</option>
+        <option value="1.5">Muy rápida</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- QR -->
+  <div class="qr-section">
+    <div class="qr-box">
+      <canvas id="qrCanvas"></canvas>
+    </div>
+    <div class="qr-info">
+      <div class="qr-title">📱 Compartir en dispositivos móviles</div>
+      <div class="qr-sub">
+        Escanea el QR con la cámara de tu teléfono para abrir este agente expositor.<br>
+        Compatible con Android, iOS, tablets y cualquier navegador moderno.
+      </div>
+      <div class="qr-url" id="qrUrlText">Cargando enlace...</div>
+    </div>
+  </div>
+
+</div><!-- shell -->
+
+<!-- QR LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════════
+   DATOS DE SLIDES
+══════════════════════════════════════════════════ */
+const SLIDES = [
+  {
+    id: 'portada',
+    label: 'Portada',
+    type: 'cover',
+    narration: `Bienvenidos a la exposición del Sistema de Gestión del Procedimiento Administrativo Sancionador Forestal de la Sub Oficina Funcional Forestal y de Fauna Silvestre de Padre Abad, correspondiente al año dos mil veinticuatro. Esta presentación ha sido preparada por el Ingeniero Javier Carlos Vela, Especialista Forestal PAS, en el marco de las competencias transferidas del SERFOR al Gobierno Regional de Ucayali.`
+  },
+  {
+    id: 'contexto',
+    label: 'Contexto',
+    type: 'normal',
+    title: 'Contexto Institucional y Marco Legal',
+    subtitle: 'Transferencia de competencias al GORE Ucayali',
+    narration: `El Sistema de Fiscalización Forestal en la provincia de Padre Abad opera bajo las competencias transferidas del SERFOR al Gobierno Regional de Ucayali, conforme a los Lineamientos de Transferencia de Funciones en materia forestal. La base normativa es la Ley número veintinueve mil setecientos sesenta y tres, Ley Forestal y de Fauna Silvestre, y su Reglamento aprobado mediante Decreto Supremo cero dieciocho guión dos mil quince guión MINAGRI. El ámbito territorial comprende los siete distritos de la provincia de Padre Abad: Alexander Von Humboldt, Padre Abad, Curimana, Neshuya, Boquerón, Irazola y Huipoca.`,
+    content: `
+      <ul class="slide-list">
+        <li data-n="①">Base legal: <strong>Ley N° 29763</strong> — Ley Forestal y de Fauna Silvestre y D.S. 018-2015-MINAGRI</li>
+        <li data-n="②">Competencias transferidas de <strong>SERFOR → GORE Ucayali</strong> — SOFFS-PA como órgano ejecutor</li>
+        <li data-n="③">Ámbito territorial: <strong>7 distritos</strong> de la provincia de Padre Abad, región Ucayali</li>
+        <li data-n="④">Articulación con <strong>FEMA</strong> (Fiscalía Especializada en Materia Ambiental) para derivación de casos con indicios delictivos</li>
+      </ul>`
+  },
+  {
+    id: 'kpis',
+    label: 'Indicadores',
+    type: 'stats',
+    title: 'Indicadores Clave de Gestión — 2024',
+    subtitle: 'Resultados del sistema PAS en cifras',
+    narration: `Durante el año dos mil veinticuatro, la SOFFS Padre Abad registró ciento cuarenta y cinco intervenciones de campo en los siete distritos de la provincia, de las cuales ciento dieciocho derivaron en expedientes de Procedimiento Administrativo Sancionador debidamente formalizados. El volumen total de madera decomisada ascendió a doscientos sesenta y cuatro metros cúbicos, con un valor de referencia de treinta y tres mil quinientos sesenta y cuatro soles. La sanción económica propuesta acumula cuarenta y nueve Unidades Impositivas Tributarias, equivalentes a aproximadamente doscientos cincuenta y siete mil soles.`,
+    stats: [
+      { n:'145', l:'Intervenciones de campo' },
+      { n:'118', l:'Expedientes PAS formalizados' },
+      { n:'264 m³', l:'Volumen decomisado' },
+      { n:'49 UIT', l:'Sanción propuesta' },
+    ]
+  },
+  {
+    id: 'diferencia',
+    label: '145 vs 118',
+    type: 'normal',
+    title: '¿Por qué 145 intervenciones y solo 118 expedientes?',
+    subtitle: 'Distinción técnica entre intervención de campo y PAS formal',
+    narration: `Es importante comprender que no toda intervención de campo genera automáticamente un expediente de Procedimiento Administrativo Sancionador. De las ciento cuarenta y cinco intervenciones registradas, veintisiete no generaron expediente independiente por tres razones técnicas. Primera: acumulación, cuando varias actas sobre el mismo administrado se consolidan en un único expediente por economía procesal, conforme al artículo doscientos treinta punto siete de la Ley número veintisiete mil cuatrocientos cuarenta y cuatro. Segunda: subsanación inmediata, cuando el administrado acreditó documentación válida en el acto de intervención. Tercera: derivación directa a la Fiscalía Especializada en Materia Ambiental cuando existían indicios de delito ambiental.`,
+    content: `
+      <ul class="slide-list">
+        <li data-n="🔀"><strong>Acumulación (12 casos):</strong> Varias actas del mismo administrado consolidadas en un único expediente PAS, por economía procesal — Art. 230.7 Ley N° 27444.</li>
+        <li data-n="✅"><strong>Subsanación inmediata (10 casos):</strong> El administrado acreditó GRT válida u otro documento habilitante en el acto de intervención.</li>
+        <li data-n="⚖️"><strong>Derivación a FEMA (5 casos):</strong> Indicios de delito ambiental determinaron la remisión directa a la Fiscalía Especializada sin apertura de PAS administrativo.</li>
+      </ul>`
+  },
+  {
+    id: 'infracciones',
+    label: 'Infracciones',
+    type: 'bars',
+    title: 'Infracciones por Tipo — Casos 2024',
+    subtitle: 'Clasificación según Ley N° 29763',
+    narration: `Las infracciones registradas durante el dos mil veinticuatro se distribuyen en cuatro tipos principales. El más frecuente es el transporte sin Guía de Remisión de Transporte válida, con cincuenta y dos casos, seguido por la extracción sin autorización con treinta y un casos, el acopio ilegal con veintitrés casos, y la adulteración de GRT con doce casos. Este último tipo, aunque el menos frecuente en número, reviste especial gravedad porque evidencia una conducta dolosa premeditada, a diferencia de los demás supuestos que pueden configurarse por negligencia del administrado.`,
+    bars: [
+      { l:'Transporte sin GRT',          v:52, max:52, c:'#5cad6a' },
+      { l:'Extracción sin autorización',  v:31, max:52, c:'#1a6ab5' },
+      { l:'Acopio ilegal',               v:23, max:52, c:'#d4620a' },
+      { l:'Adulteración de GRT',         v:12, max:52, c:'#c9931a' },
+    ]
+  },
+  {
+    id: 'grt',
+    label: 'Protocolo GRT',
+    type: 'normal',
+    title: 'Protocolo de Verificación de Adulteración de GRT',
+    subtitle: '12 casos detectados — Art. 130 inc. b) Ley N° 29763',
+    narration: `La determinación de adulteración de la Guía de Remisión de Transporte siguió un protocolo de verificación en tres niveles. El primer nivel es la verificación en el Sistema Nacional de Información Forestal y de Fauna Silvestre, el SNIFFS, donde se comprueba si el documento existe, si corresponde al remitente declarado y si el volumen autorizado coincide con la carga intervenida. El segundo nivel es el análisis físico del documento, identificando enmiendas, borrones o alteración de cifras. En ocho de los doce casos se detectaron correcciones manuales en el campo de volumen en metros cúbicos. El tercer nivel es el contraste con el regente forestal emisor, quien debe confirmar la autenticidad de su firma. En cuatro casos el regente declaró no haber emitido el documento, configurándose la infracción con agravante de falsificación documental.`,
+    content: `
+      <ul class="slide-list">
+        <li data-n="01"><strong>Verificación SNIFFS:</strong> Consulta en línea del número de GRT — existencia, remitente y volumen autorizado vs. carga intervenida.</li>
+        <li data-n="02"><strong>Análisis físico:</strong> Inspección visual del documento — enmiendas, borrones, alteración de cifras. <span class="highlight">8 de 12 casos</span> con volumen corregido manualmente.</li>
+        <li data-n="03"><strong>Contraste con el regente:</strong> Comunicación formal al regente forestal emisor. <span class="highlight">4 casos:</span> el regente negó haber emitido el documento → Art. 130 inc. b) con agravante.</li>
+      </ul>`
+  },
+  {
+    id: 'archivamiento',
+    label: 'Archivamiento',
+    type: 'bars',
+    title: 'Causas de Archivamiento — 38 Expedientes',
+    subtitle: 'Análisis de mayor a menor incidencia',
+    narration: `De los ciento dieciocho expedientes PAS formalizados, treinta y ocho fueron archivados. Las causas, ordenadas de mayor a menor incidencia, son las siguientes. La primera y más frecuente, con dieciséis expedientes, es la acreditación documentaria en descargos: el administrado presentó GRT válida, contrato de cesión u otro título habilitante durante la etapa de descargos, desvirtuando los indicios de infracción. La segunda causa, con once expedientes, es la prescripción del procedimiento, por haber superado el plazo de cuatro años previsto en el artículo doscientos treinta y tres de la Ley número veintisiete mil cuatrocientos cuarenta y cuatro. La tercera, con siete expedientes, es la insuficiencia probatoria del acta por deficiencias formales que invalidaron su mérito probatorio. Finalmente, con cuatro expedientes, el fallecimiento del administrado persona natural o la cancelación registral de la persona jurídica extinguieron la responsabilidad administrativa.`,
+    bars: [
+      { l:'Acreditación documentaria en descargos', v:16, max:16, c:'#1a6ab5' },
+      { l:'Prescripción del procedimiento',         v:11, max:16, c:'#c9931a' },
+      { l:'Insuficiencia probatoria del acta',      v:7,  max:16, c:'#9b1c1c' },
+      { l:'Fallecimiento / disolución administrado',v:4,  max:16, c:'#3a7d44' },
+    ]
+  },
+  {
+    id: 'zonas',
+    label: 'Distritos',
+    type: 'bars',
+    title: 'Volumen Decomisado por Distrito — m³',
+    subtitle: '7 distritos fiscalizados · Total 264 m³',
+    narration: `El análisis territorial del volumen decomisado revela que el distrito de Alexander Von Humboldt concentra la mayor actividad ilegal con ochenta y siete punto cuatro metros cúbicos, seguido por el distrito de Padre Abad con sesenta y tres punto dos metros cúbicos. Curimana registra cuarenta y cinco punto ocho metros cúbicos, Neshuya treinta y ocho punto uno, Boquerón veintinueve punto siete, Irazola veintidós punto cinco, y Huipoca dieciocho punto tres metros cúbicos. La concentración en Alexander Von Humboldt se explica por la densidad de concesiones forestales activas y la mayor presión extractiva sobre el bosque primario en esa zona.`,
+    bars: [
+      { l:'Alexander Von Humboldt', v:87.4, max:87.4, c:'#3a7d44' },
+      { l:'Padre Abad',             v:63.2, max:87.4, c:'#5cad6a' },
+      { l:'Curimana',               v:45.8, max:87.4, c:'#7dc485' },
+      { l:'Neshuya',                v:38.1, max:87.4, c:'#9ecba7' },
+      { l:'Boquerón',               v:29.7, max:87.4, c:'#c9931a' },
+      { l:'Irazola',                v:22.5, max:87.4, c:'#d4620a' },
+      { l:'Huipoca',                v:18.3, max:87.4, c:'#1a6ab5' },
+    ]
+  },
+  {
+    id: 'especies',
+    label: 'Especies',
+    type: 'bars',
+    title: 'Especies Forestales Decomisadas',
+    subtitle: 'Clasificación CITES e IUCN — Ley N° 29763',
+    narration: `Las especies forestales intervenidas en los operativos de control presentan distintos niveles de protección internacional. El Cedro, Cedrela odorata, con cincuenta y siete punto sesenta y cinco metros cúbicos decomisados, está incluido en el Apéndice Tres de la CITES. La Caoba, Swietenia macrophylla, con diecisiete metros cúbicos, está en el Apéndice Dos de la CITES, lo que implica control estricto de su comercio internacional. El Shihuahuaco, Dipteryx micrantha, con dieciocho punto setenta y cinco metros cúbicos, está categorizado como En Peligro según la IUCN. La presencia de estas especies en los decomisos eleva la graduación de la sanción conforme al artículo ciento cuarenta y cinco del Reglamento.`,
+    bars: [
+      { l:'Cedro (Cedrela odorata) — App. III',          v:57.65, max:57.65, c:'#ffe082' },
+      { l:'Shihuahuaco (Dipteryx micrantha) — EN',       v:18.75, max:57.65, c:'#ef9a9a' },
+      { l:'Caoba (Swietenia macrophylla) — App. II',     v:17.05, max:57.65, c:'#f48fb1' },
+      { l:'Tornillo (Cedrelinga cateniformis) — VU',     v:5.80,  max:57.65, c:'#ffe0b2' },
+      { l:'Cumala (Virola surinamensis)',                 v:3.10,  max:57.65, c:'#b0bec5' },
+    ]
+  },
+  {
+    id: 'casuistica',
+    label: 'Casuística',
+    type: 'normal',
+    title: 'Casuística Representativa — Km 78, Federico Basadre',
+    subtitle: 'Expediente EXP-SOFFS-PA-001-2024 · Octubre 2024',
+    narration: `El caso más ilustrativo del ejercicio de la potestad sancionadora durante el dos mil veinticuatro corresponde al Expediente SOFFS PA cero cero uno dos mil veinticuatro. Durante el operativo de control carretero en el kilómetro setenta y ocho de la carretera Federico Basadre, se interceptaron tres unidades de transporte que movilizaban madera aserrada de Cedro y Caoba sin Guías de Remisión de Transporte válidas. La investigación instructiva determinó que los tres vehículos pertenecían al mismo operador logístico, Juan Carlos Flores Ríos, quien registraba antecedentes por infracción similar en el año anterior. En aplicación del principio de economía procesal, las tres actas se consolidaron en un único expediente. La reincidencia, acreditada mediante los antecedentes administrativos, activó el agravante del artículo ciento cuarenta y cinco del Reglamento, elevando la sanción base de tres punto cinco Unidades Impositivas Tributarias a cinco punto cinco Unidades Impositivas Tributarias. Este caso demuestra cómo la correcta aplicación del sistema de gradualidad fortalece la eficacia de la función sancionadora.`,
+    content: `
+      <ul class="slide-list">
+        <li data-n="📍"><strong>Lugar:</strong> Km 78, carretera Federico Basadre — distrito de Padre Abad</li>
+        <li data-n="🚛"><strong>Hecho:</strong> 3 vehículos del mismo operador transportando Cedro y Caoba sin GRT válida</li>
+        <li data-n="📋"><strong>Decisión:</strong> 3 actas consolidadas en 1 expediente — Art. 230.7 Ley N° 27444 (economía procesal)</li>
+        <li data-n="⚡"><strong>Agravante:</strong> Reincidencia acreditada → Art. 145 D.S. 018-2015-MINAGRI</li>
+        <li data-n="💰"><strong>Sanción:</strong> Base 3.5 UIT → <span class="highlight">5.5 UIT aplicadas</span> (+57% por reincidencia)</li>
+      </ul>`
+  },
+  {
+    id: 'conclusion',
+    label: 'Conclusiones',
+    type: 'normal',
+    title: 'Conclusiones y Recomendaciones',
+    subtitle: 'Gestión PAS Forestal SOFFS-PA · 2024',
+    narration: `A modo de conclusión, la gestión del Procedimiento Administrativo Sancionador Forestal durante el dos mil veinticuatro evidencia un sistema consolidado con capacidad técnica y normativa para ejercer la potestad sancionadora en los siete distritos de la provincia de Padre Abad. Las ciento cuarenta y cinco intervenciones de campo, la correcta distinción entre intervención y expediente PAS, y la aplicación rigurosa del sistema de gradualidad demuestran profesionalismo institucional. Se recomienda reforzar la coordinación con el Ministerio Público, sistematizar los expedientes en una base de datos integrada, y desarrollar capacitaciones periódicas sobre el protocolo de verificación de GRT para el personal de campo. La transferencia de competencias al GORE Ucayali representa una oportunidad para fortalecer la gobernanza forestal local con mayor presencia territorial. Muchas gracias.`,
+    content: `
+      <ul class="slide-list">
+        <li data-n="✔"><strong>145 intervenciones → 118 expedientes PAS</strong> correctamente diferenciados con sustento técnico y legal</li>
+        <li data-n="✔"><strong>264 m³ decomisados</strong> en 7 distritos, con Alexander Von Humboldt como zona de mayor presión extractiva</li>
+        <li data-n="✔"><strong>Protocolo de 3 niveles</strong> para detección de GRT adulterada consolidado y documentado</li>
+        <li data-n="📌"><strong>Recomendación:</strong> Sistematizar base de datos PAS e integrar coordinación con FEMA para reducir el plazo de resolución</li>
+        <li data-n="📌"><strong>Recomendación:</strong> Capacitar al personal de campo en el protocolo SNIFFS para reducir deficiencias formales en actas</li>
+      </ul>`
+  },
+];
+
+/* ══════════════════════════════════════════════════
+   ESTADO
+══════════════════════════════════════════════════ */
+let currentSlide = 0;
+let isPlaying    = false;
+let isPaused     = false;
+let speechInst   = null;
+let autoTimer    = null;
+let speechRate   = 1.0;
+let doneSpeaking = false;
+
+/* ══════════════════════════════════════════════════
+   RENDER SLIDES
+══════════════════════════════════════════════════ */
+function renderSlides() {
+  const container = document.getElementById('slideContainer');
+  const index     = document.getElementById('slideIndex');
+
+  container.innerHTML = SLIDES.map((s, i) => buildSlide(s, i)).join('');
+  index.innerHTML     = SLIDES.map((s, i) =>
+    `<button class="idx-btn" id="idx-${i}" onclick="jumpSlide(${i})">${s.label}</button>`
+  ).join('');
+
+  showSlide(0);
+}
+
+function buildSlide(s, i) {
+  if (s.type === 'cover') {
+    return `<div class="slide slide-cover ${i===0?'active':''}" id="slide-${i}">
+      <div class="cover-logo">SOFFS-PA · GORE Ucayali · 2024</div>
+      <div class="cover-title">
+        Gestión Integral del Procedimiento
+        <em>Administrativo Sancionador Forestal</em>
+      </div>
+      <div class="cover-sub">
+        Ley N° 29763 · D.S. 018-2015-MINAGRI · Provincia Padre Abad, Ucayali
+      </div>
+      <div class="cover-presenter">
+        <div class="cover-av">JV</div>
+        <div class="cover-av-info">
+          <div class="cover-av-name">Ing. Javier Carlos Vela</div>
+          <div class="cover-av-role">Especialista Forestal PAS</div>
+          <div class="cover-av-inst">SOFFS-PA · GORE Ucayali</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  let body = '';
+
+  if (s.type === 'stats') {
+    body = `<div class="slide-stats">
+      ${s.stats.map(st => `
+        <div class="stat-box">
+          <div class="stat-n">${st.n}</div>
+          <div class="stat-l">${st.l}</div>
+        </div>`).join('')}
+    </div>`;
+  } else if (s.type === 'bars') {
+    body = `<div class="mini-bar-wrap">
+      ${s.bars.map((b, bi) => `
+        <div class="mini-bar-item">
+          <div class="mini-bar-meta">
+            <span class="mini-bar-lbl">${b.l}</span>
+            <span class="mini-bar-val">${b.v}</span>
+          </div>
+          <div class="mini-bar-track">
+            <div class="mini-bar-fill"
+              style="width:${(b.v/b.max*100).toFixed(1)}%;background:${b.c};--d:${0.2+bi*0.1}s;">
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  } else if (s.content) {
+    body = s.content;
+  }
+
+  return `<div class="slide ${i===0?'active':''}" id="slide-${i}">
+    <div class="slide-num">Sección ${String(i+1).padStart(2,'0')} de ${SLIDES.length}</div>
+    <div class="slide-title">${s.title}</div>
+    <div class="slide-body">
+      ${s.subtitle ? `<p style="color:var(--text-3);font-size:13px;margin-bottom:12px;">${s.subtitle}</p>` : ''}
+      ${body}
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   NAVEGACIÓN
+══════════════════════════════════════════════════ */
+function showSlide(n) {
+  document.querySelectorAll('.slide').forEach((s,i) => {
+    s.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.idx-btn').forEach((b, i) => {
+    b.classList.remove('current','done');
+    if (i === n) b.classList.add('current');
+    if (i < n)  b.classList.add('done');
+  });
+  const pct = ((n+1) / SLIDES.length * 100).toFixed(1);
+  document.getElementById('progressFill').style.width = pct + '%';
+  currentSlide = n;
+}
+
+function jumpSlide(n) {
+  stopSpeech();
+  showSlide(n);
+  if (isPlaying) speakAndAdvance(n);
+  else setNarrationText(SLIDES[n].narration, false);
+}
+
+function goSlide(dir) {
+  const next = currentSlide + dir;
+  if (next < 0 || next >= SLIDES.length) return;
+  stopSpeech();
+  showSlide(next);
+  if (isPlaying) speakAndAdvance(next);
+  else setNarrationText(SLIDES[next].narration, false);
+}
+
+/* ══════════════════════════════════════════════════
+   VOZ — WEB SPEECH API
+══════════════════════════════════════════════════ */
+function speakAndAdvance(idx) {
+  if (idx >= SLIDES.length) { stopPresentation(); return; }
+  showSlide(idx);
+
+  const text = SLIDES[idx].narration;
+  setNarrationText(text, true);
+
+  if (!('speechSynthesis' in window)) {
+    // Sin voz: avanzar automáticamente por tiempo
+    const ms = Math.max(text.length * 55, 4000);
+    autoTimer = setTimeout(() => { if(isPlaying && !isPaused) speakAndAdvance(idx+1); }, ms / speechRate);
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  speechInst = new SpeechSynthesisUtterance(text);
+  speechInst.lang  = 'es-PE';
+  speechInst.rate  = speechRate;
+  speechInst.pitch = 1.0;
+
+  // Seleccionar voz en español si disponible
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang.startsWith('es') && v.localService) ||
+                  voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) speechInst.voice = esVoice;
+
+  speechInst.onend = () => {
+    if (isPlaying && !isPaused) {
+      autoTimer = setTimeout(() => speakAndAdvance(idx + 1), 900);
+    }
+  };
+  speechInst.onerror = () => {
+    if (isPlaying && !isPaused) speakAndAdvance(idx + 1);
+  };
+
+  window.speechSynthesis.speak(speechInst);
+}
+
+function stopSpeech() {
+  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function setNarrationText(text, speaking) {
+  const el   = document.getElementById('narrationText');
+  const wave = document.getElementById('voiceWave');
+  el.textContent = text;
+  el.className   = 'narration-text' + (speaking ? ' speaking' : '');
+  wave.classList.toggle('hidden', !speaking);
+}
+
+/* ══════════════════════════════════════════════════
+   CONTROLES
+══════════════════════════════════════════════════ */
+function startPresentation() {
+  isPlaying = true; isPaused = false;
+  document.getElementById('btnPlay').disabled   = true;
+  document.getElementById('btnPause').disabled  = false;
+  document.getElementById('btnStop').disabled   = false;
+  document.getElementById('btnPrev').disabled   = false;
+  document.getElementById('btnNext').disabled   = false;
+  speakAndAdvance(currentSlide);
+}
+
+function togglePause() {
+  const btn = document.getElementById('btnPause');
+  if (!isPaused) {
+    isPaused = true;
+    if ('speechSynthesis' in window) window.speechSynthesis.pause();
+    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    btn.innerHTML = '<span class="btn-icon">▶</span> Continuar';
+    document.getElementById('voiceWave').classList.add('hidden');
+  } else {
+    isPaused = false;
+    if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    } else {
+      speakAndAdvance(currentSlide);
+    }
+    btn.innerHTML = '<span class="btn-icon">⏸</span> Pausar';
+    document.getElementById('voiceWave').classList.remove('hidden');
+  }
+}
+
+function stopPresentation() {
+  isPlaying = false; isPaused = false;
+  stopSpeech();
+  document.getElementById('btnPlay').disabled   = false;
+  document.getElementById('btnPause').disabled  = true;
+  document.getElementById('btnStop').disabled   = true;
+  document.getElementById('btnPrev').disabled   = true;
+  document.getElementById('btnNext').disabled   = true;
+  document.getElementById('btnPause').innerHTML = '<span class="btn-icon">⏸</span> Pausar';
+  document.getElementById('voiceWave').classList.add('hidden');
+  setNarrationText('Exposición detenida. Presiona ▶ Iniciar Exposición para comenzar nuevamente.', false);
+}
+
+function changeSpeed() {
+  speechRate = parseFloat(document.getElementById('speedSelect').value);
+  if (isPlaying && !isPaused && 'speechSynthesis' in window) {
+    const idx = currentSlide;
+    stopSpeech();
+    speakAndAdvance(idx);
+  }
+}
+
+// Cargar voces al inicio (necesario en Chrome)
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = () => {};
+  window.speechSynthesis.getVoices();
+}
+
+/* ══════════════════════════════════════════════════
+   QR CODE
+══════════════════════════════════════════════════ */
+function generateQR() {
+  const url = window.location.href;
+  document.getElementById('qrUrlText').textContent = url;
+  try {
+    new QRCode(document.getElementById('qrCanvas'), {
+      text:          url,
+      width:         84,
+      height:        84,
+      colorDark:     '#0b1c10',
+      colorLight:    '#ffffff',
+      correctLevel:  QRCode.CorrectLevel.M,
+    });
+  } catch(e) {
+    document.getElementById('qrCanvas').parentElement.innerHTML =
+      '<div style="font-size:10px;color:#666;text-align:center;padding:10px;">QR<br>disponible<br>online</div>';
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+renderSlides();
+setNarrationText(SLIDES[0].narration, false);
+setTimeout(generateQR, 500);
+</script>
+</body>
+</html>

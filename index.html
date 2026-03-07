@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAS Forestal — SOFFS-PA Padre Abad 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b1c10;--forest:#245c2e;--moss:#3a7d44;--leaf:#5cad6a;
+  --mist:#9ecba7;--fog:#d0e8d4;--cream:#f4f0e6;--gold:#c9931a;
+  --gold-lt:#e8b84b;--text:#eef4ef;--text2:#c2d6c7;--text3:#9dbfa6;
+  --line:rgba(200,230,205,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 15% 20%,rgba(36,92,46,0.22) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 85% 80%,rgba(201,147,26,0.07) 0%,transparent 50%);pointer-events:none;}
+
+.card{position:relative;z-index:1;max-width:560px;width:100%;background:rgba(255,255,255,0.028);border:1px solid var(--line);border-radius:20px;padding:40px 36px 36px;text-align:center;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forest),var(--gold),var(--leaf));border-radius:20px 20px 0 0;}
+
+.eyebrow{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--leaf);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--leaf);}
+
+.title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,42px);font-weight:700;color:var(--cream);line-height:1.08;letter-spacing:-0.5px;margin-bottom:8px;}
+.title em{color:var(--gold-lt);font-style:italic;display:block;}
+
+.subtitle{font-size:13.5px;color:var(--text3);line-height:1.6;margin-bottom:32px;}
+
+.links{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;}
+.link-btn{
+  display:flex;align-items:center;gap:16px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--line);
+  border-radius:14px;padding:18px 20px;text-decoration:none;
+  transition:all 0.25s;text-align:left;
+}
+.link-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(200,230,205,0.28);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.3);}
+.link-icon{font-size:26px;flex-shrink:0;}
+.link-info{}
+.link-name{font-size:15px;font-weight:600;color:var(--cream);margin-bottom:3px;}
+.link-desc{font-size:12px;color:var(--text3);}
+.link-arrow{margin-left:auto;font-size:18px;color:var(--leaf);opacity:0.6;transition:transform 0.2s;}
+.link-btn:hover .link-arrow{transform:translateX(4px);opacity:1;}
+
+.divider{height:1px;background:var(--line);margin:4px 0 20px;}
+
+.footer-info{font-family:'Fira Code',monospace;font-size:10px;color:var(--text3);letter-spacing:1px;line-height:1.8;}
+.footer-info strong{color:var(--leaf);}
+
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:pulse 2s ease infinite;vertical-align:middle;margin-right:6px;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(92,173,106,0.5);}50%{box-shadow:0 0 0 6px rgba(92,173,94,0);}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">SOFFS-PA · GORE Ucayali · 2024</div>
+  <h1 class="title">
+    Gestión Integral PAS
+    <em>Forestal y Fauna Silvestre</em>
+  </h1>
+  <p class="subtitle">
+    Sistema de Fiscalización Forestal — Provincia de Padre Abad<br>
+    Ley N° 29763 · D.S. 018-2015-MINAGRI
+  </p>
+
+  <div class="links">
+    <a class="link-btn" href="Dashboard_PAS_Exposicion_JCV.html">
+      <div class="link-icon">📊</div>
+      <div class="link-info">
+        <div class="link-name">Dashboard Interactivo</div>
+        <div class="link-desc">Gráficos, estadísticas, análisis normativo y casuística 2024</div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+    <a class="link-btn" href="Agente_Expositor_PAS_Forestal.html">
+      <div class="link-icon">🎙</div>
+      <div class="link-info">
+        <div class="link-name">Agente Expositor con Voz</div>
+        <div class="link-desc">Presentación automática narrada · 11 secciones · Compatible móvil</div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+  <div class="footer-info">
+    <span class="dot"></span><strong>Ing. Javier Carlos Vela</strong> · Especialista Forestal PAS<br>
+    Sub Oficina de Funciones Forestales y de Fauna Silvestre — Padre Abad<br>
+    Gobierno Regional de Ucayali
+  </div>
+</div>
+</body>
+</html>
