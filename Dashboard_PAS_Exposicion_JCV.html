@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAS Forestal 2024 — ATFFS Padre Abad</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════════════════ */
+:root{
+  --ink:       #0b1c10;
+  --ink-2:     #132b19;
+  --ink-3:     #1e3d25;
+  --forest:    #245c2e;
+  --moss:      #3a7d44;
+  --leaf:      #5cad6a;
+  --mist:      #9ecba7;
+  --fog:       #d0e8d4;
+  --cream:     #f4f0e6;
+  --gold:      #c9931a;
+  --gold-lt:   #e8b84b;
+  --amber:     #d4620a;
+  --crimson:   #9b1c1c;
+  --cobalt:    #1a3a7c;
+  --slate:     #3d5a60;
+  --text:      #eef4ef;
+  --text-2:    #c2d6c7;
+  --text-3:    #9dbfa6;
+  --line:      rgba(200,230,205,0.10);
+  --glow-g:    rgba(92,173,106,0.15);
+  --r:         16px;
+  --r-sm:      10px;
+  --shadow:    0 12px 48px rgba(0,0,0,0.45);
+  --shadow-sm: 0 4px 18px rgba(0,0,0,0.28);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ─── FONDO TEXTURA FORESTAL ─── */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 70% at 5% 10%,  rgba(36,92,46,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 80% at 95% 90%,  rgba(11,28,16,0.95) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,  rgba(30,61,37,0.15) 0%, transparent 80%),
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.008) 0.5deg, transparent 1deg);
+  pointer-events:none;
+}
+
+/* Orbes de luz ambiental */
+.ambient{
+  position:fixed;border-radius:50%;
+  filter:blur(90px);pointer-events:none;z-index:0;
+  animation:breathe 14s ease-in-out infinite alternate;
+}
+.a1{width:600px;height:400px;background:rgba(36,92,46,0.16);top:-80px;left:-60px;animation-delay:0s;}
+.a2{width:400px;height:400px;background:rgba(201,147,26,0.07);bottom:5%;right:-5%;animation-delay:-5s;}
+.a3{width:300px;height:300px;background:rgba(26,58,124,0.06);top:45%;left:45%;animation-delay:-9s;}
+@keyframes breathe{from{transform:scale(1) translate(0,0);}to{transform:scale(1.12) translate(25px,35px);}}
+
+/* ─── LAYOUT PRINCIPAL ─── */
+.shell{
+  position:relative;z-index:1;
+  max-width:1560px;margin:0 auto;
+  padding:28px 32px 48px;
+}
+
+/* ═══════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════ */
+.header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:start;
+  gap:24px;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:32px;
+  opacity:0;
+  animation:slideDown 0.8s cubic-bezier(.16,1,.3,1) 0.1s forwards;
+}
+
+.header-eyebrow{
+  font-family:'Fira Code',monospace;
+  font-size:10.5px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--leaf);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:12px;
+}
+.header-eyebrow::before{
+  content:'';width:28px;height:1px;
+  background:linear-gradient(90deg,var(--leaf),transparent);
+}
+
+.header-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,3.8vw,52px);
+  font-weight:700;line-height:1.08;
+  letter-spacing:-0.5px;
+  color:var(--cream);
+}
+.header-title em{
+  font-style:italic;color:var(--gold-lt);
+  display:block;
+}
+
+.header-sub{
+  margin-top:10px;font-size:13.5px;
+  color:var(--text-2);line-height:1.6;
+  max-width:640px;
+}
+
+/* Badge del ponente */
+.ponente{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:18px 22px;
+  display:flex;align-items:center;gap:16px;
+  min-width:260px;
+  backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;
+}
+.ponente::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--forest),var(--gold),var(--forest));
+}
+.avatar-ring{
+  position:relative;flex-shrink:0;
+}
+.avatar-ring svg{
+  position:absolute;inset:-4px;
+  animation:rotateSvg 12s linear infinite;
+}
+@keyframes rotateSvg{to{transform:rotate(360deg);}}
+.avatar{
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,var(--forest),var(--moss));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:700;color:var(--cream);
+  position:relative;z-index:1;
+}
+.pon-name{font-size:14.5px;font-weight:600;color:var(--cream);letter-spacing:-0.2px;}
+.pon-title{font-size:11.5px;color:var(--leaf);margin-top:3px;}
+.pon-inst{font-size:11px;color:var(--text-2);margin-top:2px;}
+
+/* Indicador LIVE */
+.live-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Fira Code',monospace;font-size:9.5px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--leaf);
+  background:rgba(92,173,106,0.1);
+  border:1px solid rgba(92,173,106,0.2);
+  border-radius:20px;padding:4px 10px;
+  margin-top:8px;display:inline-flex;
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--leaf);
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(92,173,106,0.5);}50%{box-shadow:0 0 0 6px rgba(92,173,106,0);}}
+
+/* ═══════════════════════════════════════════════════
+   KPI ROW
+═══════════════════════════════════════════════════ */
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:14px;
+  margin-bottom:24px;
+  opacity:0;
+  animation:slideUp 0.7s cubic-bezier(.16,1,.3,1) 0.25s forwards;
+}
+@media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px) {.kpi-row{grid-template-columns:repeat(2,1fr);}}
+
+.kpi{
+  position:relative;
+  background:rgba(255,255,255,0.030);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:20px 18px 16px;
+  overflow:hidden;
+  cursor:default;
+  transition:transform 0.3s, background 0.3s, border-color 0.3s;
+}
+.kpi:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,0.055);
+  border-color:rgba(200,230,205,0.22);
+}
+/* Barra de color superior */
+.kpi::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2.5px;
+  background:var(--c,var(--moss));
+  transition:opacity 0.3s;
+}
+/* Icono fantasma */
+.kpi-icon{
+  position:absolute;right:14px;top:14px;
+  font-size:24px;opacity:0.15;
+  transition:opacity 0.3s, transform 0.3s;
+  pointer-events:none;
+}
+.kpi:hover .kpi-icon{opacity:0.28;transform:scale(1.12);}
+
+.kpi-label{
+  font-family:'Fira Code',monospace;
+  font-size:9.5px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--mist);
+  margin-bottom:10px;
+}
+.kpi-num{
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(28px,2.9vw,42px);
+  font-weight:700;line-height:1;
+  color:var(--cream);letter-spacing:-1px;
+}
+.kpi-unit{font-size:14px;opacity:0.5;font-weight:400;margin-left:2px;}
+.kpi-footnote{
+  font-size:11.5px;color:var(--text-2);
+  margin-top:7px;display:flex;align-items:center;gap:6px;
+}
+.pill{
+  font-family:'Fira Code',monospace;
+  font-size:9px;padding:2px 7px;border-radius:20px;font-weight:500;
+}
+
+/* ═══════════════════════════════════════════════════
+   MAIN GRID 3 COLS
+═══════════════════════════════════════════════════ */
+.grid-main{
+  display:grid;
+  grid-template-columns:1.7fr 1fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
+  opacity:0;
+  animation:slideUp 0.7s cubic-bezier(.16,1,.3,1) 0.38s forwards;
+}
+@media(max-width:1000px){.grid-main{grid-template-columns:1fr 1fr;}}
+@media(max-width:680px) {.grid-main{grid-template-columns:1fr;}}
+
+.grid-bottom{
+  display:grid;
+  grid-template-columns:1.1fr 1fr 1.3fr;
+  gap:18px;
+  opacity:0;
+  animation:slideUp 0.7s cubic-bezier(.16,1,.3,1) 0.5s forwards;
+}
+@media(max-width:1000px){.grid-bottom{grid-template-columns:1fr 1fr;}}
+@media(max-width:680px) {.grid-bottom{grid-template-columns:1fr;}}
+
+/* ─── CARD BASE ─── */
+.card{
+  background:rgba(255,255,255,0.028);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:22px 22px 20px;
+  backdrop-filter:blur(8px);
+  position:relative;overflow:hidden;
+}
+.card-head{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.card-title{
+  font-family:'Fira Code',monospace;
+  font-size:10.5px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--fog);
+}
+.card-badge{
+  font-family:'Fira Code',monospace;font-size:9.5px;
+  padding:3px 9px;border-radius:20px;
+  background:rgba(92,173,106,0.12);
+  color:var(--fog);
+  border:1px solid rgba(92,173,106,0.28);
+  letter-spacing:1px;
+}
+
+/* ═══════════════════════════════════════════════════
+   SPARKLINE — TENDENCIA MENSUAL
+═══════════════════════════════════════════════════ */
+#spark-wrap{position:relative;margin-bottom:6px;}
+#spark-svg{width:100%;height:110px;display:block;overflow:visible;}
+.spark-label-row{
+  display:flex;justify-content:space-between;
+  padding:0 2px;margin-top:4px;
+}
+.spark-label-row span{
+  font-family:'Fira Code',monospace;
+  font-size:10px;color:var(--text-2);letter-spacing:0.5px;
+}
+.spark-stat-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:16px;
+}
+.spark-stat{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);
+  border-radius:var(--r-sm);
+  padding:12px 14px;text-align:center;
+}
+.spark-stat-val{
+  font-family:'Outfit',sans-serif;
+  font-size:24px;font-weight:700;color:var(--cream);
+}
+.spark-stat-lab{
+  font-family:'Fira Code',monospace;
+  font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-2);margin-top:3px;
+}
+
+/* ═══════════════════════════════════════════════════
+   DONA
+═══════════════════════════════════════════════════ */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.donut-svg-wrap{position:relative;width:150px;height:150px;flex-shrink:0;}
+.donut-svg-wrap svg{display:block;}
+.donut-inner{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.donut-n{
+  font-family:'Outfit',sans-serif;
+  font-size:34px;font-weight:700;
+  color:var(--cream);line-height:1;
+}
+.donut-lbl{
+  font-family:'Fira Code',monospace;font-size:9.5px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-2);
+}
+.legend{width:100%;}
+.leg-item{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  cursor:default;
+  transition:background 0.2s;
+}
+.leg-item:last-child{border:none;}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.leg-name{font-size:12.5px;color:var(--text);flex:1;}
+.leg-n{
+  font-family:'Fira Code',monospace;
+  font-size:12.5px;color:var(--cream);font-weight:600;
+}
+.leg-pct{
+  font-family:'Fira Code',monospace;
+  font-size:11px;color:var(--text-2);
+  margin-left:4px;
+}
+
+/* ═══════════════════════════════════════════════════
+   BARRAS HORIZONTALES
+═══════════════════════════════════════════════════ */
+.hbar-item{margin-bottom:13px;}
+.hbar-meta{
+  display:flex;justify-content:space-between;
+  align-items:baseline;margin-bottom:5px;
+}
+.hbar-name{font-size:13px;font-weight:500;color:var(--text);}
+.hbar-name small{font-size:11px;color:var(--text-2);font-style:italic;margin-left:4px;}
+.hbar-val{
+  font-family:'Fira Code',monospace;
+  font-size:12px;color:var(--gold-lt);
+}
+.hbar-track{
+  height:7px;background:rgba(255,255,255,0.06);
+  border-radius:4px;overflow:hidden;
+}
+.hbar-fill{
+  height:100%;border-radius:4px;
+  transform:scaleX(0);transform-origin:left;
+  animation:growX 1.2s cubic-bezier(.16,1,.3,1) var(--d,0.2s) forwards;
+}
+@keyframes growX{to{transform:scaleX(1);}}
+
+/* ═══════════════════════════════════════════════════
+   EXPEDIENTES TIMELINE
+═══════════════════════════════════════════════════ */
+.tl-item{
+  display:grid;grid-template-columns:40px 1fr;
+  gap:12px;padding-bottom:14px;
+  position:relative;
+}
+.tl-item:not(:last-child)::before{
+  content:'';position:absolute;
+  left:19px;top:38px;bottom:0;width:1px;
+  background:var(--line);
+}
+.tl-num{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fira Code',monospace;font-size:11px;
+  border:1px solid;flex-shrink:0;
+  font-weight:500;
+}
+.tl-code{
+  font-family:'Fira Code',monospace;font-size:10px;
+  letter-spacing:1px;color:var(--text-2);margin-bottom:3px;
+}
+.tl-name{font-size:13px;font-weight:500;color:var(--cream);margin-bottom:4px;}
+.tl-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.chip{
+  font-family:'Fira Code',monospace;font-size:9px;
+  padding:2px 8px;border-radius:20px;border:1px solid;
+  letter-spacing:0.5px;
+}
+
+/* ═══════════════════════════════════════════════════
+   NORMA BOXES
+═══════════════════════════════════════════════════ */
+.norma{
+  border-radius:var(--r-sm);
+  padding:13px 15px;margin-bottom:10px;
+  cursor:default;
+  transition:filter 0.2s, transform 0.2s;
+  position:relative;overflow:hidden;
+}
+.norma::before{
+  content:'';position:absolute;
+  left:0;top:0;bottom:0;width:3px;
+  background:var(--nc,var(--gold));
+}
+.norma:hover{filter:brightness(1.1);transform:translateX(2px);}
+.norma-art{
+  font-family:'Fira Code',monospace;font-size:10.5px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--nc,var(--gold));margin-bottom:5px;
+}
+.norma-body{font-size:13px;color:var(--text);line-height:1.5;}
+.norma-foot{font-size:11.5px;color:var(--text-2);margin-top:5px;}
+
+/* ═══════════════════════════════════════════════════
+   TABLA ESPECIES
+═══════════════════════════════════════════════════ */
+.esp-tbl{width:100%;border-collapse:collapse;}
+.esp-tbl thead th{
+  font-family:'Fira Code',monospace;
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--mist);padding:7px 10px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+}
+.esp-tbl tbody tr{
+  transition:background 0.15s;
+  cursor:default;
+}
+.esp-tbl tbody tr:hover td{background:rgba(255,255,255,0.04);}
+.esp-tbl td{
+  font-size:12px;color:var(--text);
+  padding:10px 10px;
+  border-bottom:1px solid rgba(255,255,255,0.035);
+  vertical-align:middle;
+}
+.cites{
+  font-family:'Fira Code',monospace;font-size:9px;
+  padding:3px 7px;border-radius:5px;font-weight:600;
+}
+.mini-bar{
+  height:4px;border-radius:2px;margin-top:4px;
+  transform:scaleX(0);transform-origin:left;
+  animation:growX 1s cubic-bezier(.16,1,.3,1) var(--d,0.4s) forwards;
+}
+.sp-sci{font-size:11px;color:var(--text-2);font-style:italic;margin-top:1px;}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+.footer{
+  margin-top:28px;padding-top:18px;
+  border-top:1px solid var(--line);
+  display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:12px;
+  opacity:0;
+  animation:slideUp 0.6s cubic-bezier(.16,1,.3,1) 0.65s forwards;
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:700;color:var(--mist);
+  letter-spacing:-0.3px;
+}
+.footer-meta{
+  font-family:'Fira Code',monospace;font-size:10.5px;
+  color:var(--text-2);letter-spacing:0.5px;
+}
+
+/* ═══════════════════════════════════════════════════
+   ANIMACIONES
+═══════════════════════════════════════════════════ */
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-24px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:none;}
+}
+
+/* scrollbar */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--ink);}
+::-webkit-scrollbar-thumb{background:var(--forest);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<div class="a1 ambient"></div>
+<div class="a2 ambient"></div>
+<div class="a3 ambient"></div>
+
+<div class="shell">
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="header">
+  <div>
+    <div class="header-eyebrow">
+      Sistema PAS Forestal · SOFFS-PA · Ucayali · 2024
+    </div>
+    <h1 class="header-title">
+      Gestión Integral del Procedimiento
+      <em>Administrativo Sancionador Forestal</em>
+    </h1>
+    <p class="header-sub">
+      Análisis estadístico, marco normativo y resultados del sistema de fiscalización forestal en la provincia de Padre Abad — Ley N° 29763 · D.S. 018-2015-MINAGRI · GORE Ucayali
+    </p>
+    <div class="live-chip" style="margin-top:12px;">
+      <span class="live-dot"></span>
+      Dashboard Activo · Datos 2024
+    </div>
+  </div>
+
+  <div class="ponente">
+    <div class="avatar-ring">
+      <svg width="62" height="62" viewBox="0 0 62 62">
+        <circle cx="31" cy="31" r="29" fill="none"
+          stroke="url(#rg)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <defs>
+          <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5cad6a"/>
+            <stop offset="50%" stop-color="#c9931a"/>
+            <stop offset="100%" stop-color="#5cad6a"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="avatar">JV</div>
+    </div>
+    <div>
+      <div class="pon-name">Ing. Javier Carlos Vela</div>
+      <div class="pon-title">Especialista Forestal — PAS</div>
+      <div class="pon-inst">SOFFS-PA · GORE Ucayali</div>
+      <div class="pon-inst" style="margin-top:3px;color:var(--gold);">
+        Ing. Recursos Naturales Renovables
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════ KPIs ═══════ -->
+<div class="kpi-row">
+
+  <div class="kpi" style="--c:#5cad6a">
+    <div class="kpi-icon">📋</div>
+    <div class="kpi-label">Expedientes PAS Formalizados</div>
+    <div class="kpi-num"><span class="counter" data-to="118">0</span></div>
+    <div class="kpi-footnote">
+      <span class="pill" style="background:rgba(92,173,106,0.13);color:#9ecba7;">de 145</span>
+      intervenciones de campo
+    </div>
+  </div>
+
+  <div class="kpi" style="--c:#1a6ab5">
+    <div class="kpi-icon">⚖️</div>
+    <div class="kpi-label">Expedientes Activos</div>
+    <div class="kpi-num"><span class="counter" data-to="80">0</span></div>
+    <div class="kpi-footnote">
+      <span class="pill" style="background:rgba(26,106,181,0.15);color:#90caf9;">68 %</span>
+      del total 2024
+    </div>
+  </div>
+
+  <div class="kpi" style="--c:#3a7d44">
+    <div class="kpi-icon">🌳</div>
+    <div class="kpi-label">Volumen Decomisado</div>
+    <div class="kpi-num">
+      <span class="counter" data-to="264">0</span>
+      <span class="kpi-unit">m³</span>
+    </div>
+    <div class="kpi-footnote">
+      <span class="pill" style="background:rgba(58,125,68,0.15);color:#a5d6a7;">madera</span>
+      7 distritos fiscalizados
+    </div>
+  </div>
+
+  <div class="kpi" style="--c:#c9931a">
+    <div class="kpi-icon">💰</div>
+    <div class="kpi-label">Valor Decomisado</div>
+    <div class="kpi-num" style="font-size:clamp(22px,2.2vw,32px);">
+      S/.&thinsp;<span class="counter" data-to="33564">0</span>
+    </div>
+    <div class="kpi-footnote">
+      <span class="pill" style="background:rgba(201,147,26,0.14);color:#ffe082;">valor ref.</span>
+      precio mercado
+    </div>
+  </div>
+
+  <div class="kpi" style="--c:#d4620a">
+    <div class="kpi-icon">⚡</div>
+    <div class="kpi-label">Sanción Propuesta</div>
+    <div class="kpi-num">
+      <span class="counter" data-to="49">0</span>
+      <span class="kpi-unit">UIT</span>
+    </div>
+    <div class="kpi-footnote">
+      <span class="pill" style="background:rgba(212,98,10,0.14);color:#ffcc80;">≈ S/.257K</span>
+      Art. 145 Rglto.
+    </div>
+  </div>
+
+  <div class="kpi" style="--c:#9b1c1c">
+    <div class="kpi-icon">🔁</div>
+    <div class="kpi-label">Administr. Reincidentes</div>
+    <div class="kpi-num"><span class="counter" data-to="3">0</span></div>
+    <div class="kpi-footnote">
+      <span class="pill" style="background:rgba(155,28,28,0.15);color:#ef9a9a;">Agravante</span>
+      hasta +50% sanción
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════ MAIN GRID ═══════ -->
+<div class="grid-main">
+
+  <!-- Tendencia mensual -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Intervenciones de Campo vs. Expedientes PAS — 2024</span>
+      <span class="card-badge">145 intervenciones · 118 expedientes</span>
+    </div>
+    <div id="spark-wrap">
+      <svg id="spark-svg" viewBox="0 0 720 110"></svg>
+      <div class="spark-label-row" id="spark-labels"></div>
+    </div>
+    <div class="spark-stat-row">
+      <div class="spark-stat">
+        <div class="spark-stat-val" style="color:var(--gold-lt);">18</div>
+        <div class="spark-stat-lab">Pico Oct. — intervenciones</div>
+      </div>
+      <div class="spark-stat">
+        <div class="spark-stat-val">12.1</div>
+        <div class="spark-stat-lab">Promedio mensual</div>
+      </div>
+      <div class="spark-stat">
+        <div class="spark-stat-val" style="color:var(--leaf);">145</div>
+        <div class="spark-stat-lab">Total intervenciones campo</div>
+      </div>
+    </div>
+
+    <!-- EXPLICACIÓN DIFERENCIA -->
+    <div style="margin-top:18px;padding:16px 18px;background:rgba(201,147,26,0.07);border:1px solid rgba(201,147,26,0.2);border-radius:12px;">
+      <div style="font-family:'Fira Code',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-lt);margin-bottom:10px;">
+        ¿Por qué 145 intervenciones y solo 118 expedientes PAS?
+      </div>
+      <p style="font-size:12.5px;color:var(--text);line-height:1.65;">
+        No toda intervención de campo genera automáticamente un expediente PAS. De las <strong style="color:var(--cream);">145 intervenciones registradas</strong> en 2024, <strong style="color:var(--leaf);">118 derivaron en procedimiento sancionador formal</strong>. Las <strong style="color:var(--gold-lt);">27 restantes</strong> no generaron expediente independiente por tres razones técnicas:
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+        <div style="background:rgba(155,28,28,0.12);border:1px solid rgba(155,28,28,0.25);border-radius:8px;padding:10px 12px;">
+          <div style="font-family:'Fira Code',monospace;font-size:9px;color:#ef9a9a;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">🔀 Acumulación</div>
+          <div style="font-size:11.5px;color:var(--text);line-height:1.5;">Varias actas de intervención sobre el mismo administrado se consolidaron en un único expediente PAS.</div>
+        </div>
+        <div style="background:rgba(26,106,181,0.12);border:1px solid rgba(26,106,181,0.25);border-radius:8px;padding:10px 12px;">
+          <div style="font-family:'Fira Code',monospace;font-size:9px;color:#90caf9;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">✅ Subsanación</div>
+          <div style="font-size:11.5px;color:var(--text);line-height:1.5;">El administrado acreditó documentación válida en el acto de intervención, archivándose la diligencia sin iniciar PAS.</div>
+        </div>
+        <div style="background:rgba(92,173,106,0.10);border:1px solid rgba(92,173,106,0.22);border-radius:8px;padding:10px 12px;">
+          <div style="font-family:'Fira Code',monospace;font-size:9px;color:#9ecba7;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">⚖️ Derivación</div>
+          <div style="font-size:11.5px;color:var(--text);line-height:1.5;">Casos con indicios de delito ambiental fueron derivados directamente a la FEMA sin apertura de PAS administrativo.</div>
+        </div>
+      </div>
+
+      <!-- CASUÍSTICA REAL -->
+      <div style="margin-top:14px;padding-top:13px;border-top:1px solid rgba(201,147,26,0.15);">
+        <div style="font-family:'Fira Code',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-lt);margin-bottom:9px;">
+          📌 Casuística representativa — Km 78, Federico Basadre (Oct. 2024)
+        </div>
+        <p style="font-size:12.5px;color:var(--text);line-height:1.70;">
+          Durante el operativo de control carretero en el Km 78 de la carretera Federico Basadre, se interceptaron <strong style="color:var(--cream);">tres (3) unidades de transporte</strong> que movilizaban madera aserrada de Cedro (<em>Cedrela odorata</em>) y Caoba (<em>Swietenia macrophylla</em>) sin Guías de Remisión de Transporte (GRT) válidas. Las tres intervenciones generaron actas independientes; sin embargo, la investigación instructiva determinó que los tres vehículos pertenecían al mismo operador logístico — <strong style="color:var(--cream);">Juan Carlos Flores Rios</strong> — quien ya registraba antecedentes por infracción similar en el año anterior. En aplicación del principio de economía procesal y del Art. 230.7 de la Ley N° 27444, las tres actas se consolidaron en el <strong style="color:var(--gold-lt);">Expediente EXP-SOFFS-PA-001-2024</strong>, con aplicación del agravante de reincidencia previsto en el Art. 145 del D.S. 018-2015-MINAGRI, elevando la sanción base de 3.5 UIT a <strong style="color:var(--gold-lt);">5.5 UIT</strong>. Este caso ilustra cómo tres intervenciones de campo se traducen en un único expediente PAS con mayor carga sancionadora.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dona -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Estado de Expedientes</span>
+      <span class="card-badge">Distribución</span>
+    </div>
+    <div class="donut-wrap">
+      <div class="donut-svg-wrap">
+        <svg id="donut-svg" width="150" height="150" viewBox="0 0 150 150"></svg>
+        <div class="donut-inner">
+          <div class="donut-n" id="donut-n">0</div>
+          <div class="donut-lbl">Total</div>
+        </div>
+      </div>
+      <div class="legend" id="donut-legend"></div>
+    </div>
+
+    <!-- CAUSAS DE ARCHIVAMIENTO -->
+    <div style="margin-top:16px;padding:14px 15px;background:rgba(74,92,96,0.18);border:1px solid rgba(144,164,174,0.18);border-radius:10px;">
+      <div style="font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mist);margin-bottom:11px;">
+        Causas de archivamiento — 38 expedientes
+      </div>
+
+      <!-- Causa 1 -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:600;color:var(--cream);">Acreditación documentaria en descargos</span>
+          <span style="font-family:'Fira Code',monospace;font-size:11px;color:#90caf9;">16 exp.</span>
+        </div>
+        <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
+          <div style="width:42%;height:100%;background:#1a6ab5;border-radius:3px;animation:growX 1s cubic-bezier(.16,1,.3,1) 0.3s both;transform:scaleX(0);transform-origin:left;"></div>
+        </div>
+        <div style="font-size:10.5px;color:var(--text-2);margin-top:3px;">El administrado presentó GRT válida, contrato de cesión u otro título habilitante durante la etapa de descargos, desvirtuando los indicios de infracción.</div>
+      </div>
+
+      <!-- Causa 2 -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:600;color:var(--cream);">Prescripción del procedimiento</span>
+          <span style="font-family:'Fira Code',monospace;font-size:11px;color:#ffe082;">11 exp.</span>
+        </div>
+        <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
+          <div style="width:29%;height:100%;background:#c9931a;border-radius:3px;animation:growX 1s cubic-bezier(.16,1,.3,1) 0.4s both;transform:scaleX(0);transform-origin:left;"></div>
+        </div>
+        <div style="font-size:10.5px;color:var(--text-2);margin-top:3px;">Superado el plazo de 4 años previsto en el Art. 233 de la Ley N° 27444 sin haberse emitido resolución, operó la prescripción de la potestad sancionadora.</div>
+      </div>
+
+      <!-- Causa 3 -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:600;color:var(--cream);">Insuficiencia probatoria del acta</span>
+          <span style="font-family:'Fira Code',monospace;font-size:11px;color:#ef9a9a;">7 exp.</span>
+        </div>
+        <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
+          <div style="width:18%;height:100%;background:#9b1c1c;border-radius:3px;animation:growX 1s cubic-bezier(.16,1,.3,1) 0.5s both;transform:scaleX(0);transform-origin:left;"></div>
+        </div>
+        <div style="font-size:10.5px;color:var(--text-2);margin-top:3px;">El acta de intervención adolecía de deficiencias formales —ausencia de testigos, coordenadas erróneas o falta de firma del intervenido— que invalidaron su mérito probatorio.</div>
+      </div>
+
+      <!-- Causa 4 -->
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:600;color:var(--cream);">Fallecimiento o disolución del administrado</span>
+          <span style="font-family:'Fira Code',monospace;font-size:11px;color:#a5d6a7;">4 exp.</span>
+        </div>
+        <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
+          <div style="width:11%;height:100%;background:#3a7d44;border-radius:3px;animation:growX 1s cubic-bezier(.16,1,.3,1) 0.6s both;transform:scaleX(0);transform-origin:left;"></div>
+        </div>
+        <div style="font-size:10.5px;color:var(--text-2);margin-top:3px;">Extinción de la responsabilidad administrativa por muerte del administrado persona natural o cancelación registral de la persona jurídica, conforme al Art. 236 de la Ley N° 27444.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barras: Tipo infracción -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Infracciones por Tipo</span>
+      <span class="card-badge">Casos 2024</span>
+    </div>
+    <div id="bar-tipo"></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);">
+      <div style="font-family:'Fira Code',monospace;font-size:9.5px;color:var(--mist);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Zona de mayor incidencia</div>
+      <div style="font-size:14px;font-weight:600;color:var(--cream);">Alexander Von Humboldt</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:3px;">87.4 m³ decomisados · 34 operativos</div>
+    </div>
+
+    <!-- PROTOCOLO ADULTERACIÓN GRT -->
+    <div style="margin-top:16px;padding:14px 15px;background:rgba(201,147,26,0.07);border:1px solid rgba(201,147,26,0.22);border-radius:10px;">
+      <div style="font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-lt);margin-bottom:10px;">
+        Protocolo de verificación — Adulteración de GRT · 12 casos
+      </div>
+      <p style="font-size:12px;color:var(--text);line-height:1.65;margin-bottom:12px;">
+        La determinación de adulteración de la Guía de Remisión de Transporte (GRT) siguió un protocolo de verificación en tres niveles secuenciales, aplicado por el especialista en campo y posteriormente validado en gabinete:
+      </p>
+
+      <!-- Paso 1 -->
+      <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;margin-bottom:10px;align-items:start;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(201,147,26,0.18);border:1px solid rgba(201,147,26,0.35);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:12px;font-weight:600;color:var(--gold-lt);flex-shrink:0;">01</div>
+        <div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--cream);margin-bottom:3px;">Verificación en el SNIFFS</div>
+          <div style="font-size:11.5px;color:var(--text-2);line-height:1.55;">Consulta en línea del número de GRT en el Sistema Nacional de Información Forestal y de Fauna Silvestre (SNIFFS-SERFOR). Se verificó si el documento existía en el sistema, si correspondía al remitente declarado y si el volumen autorizado coincidía con la carga intervenida.</div>
+        </div>
+      </div>
+
+      <!-- Paso 2 -->
+      <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;margin-bottom:10px;align-items:start;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(201,147,26,0.18);border:1px solid rgba(201,147,26,0.35);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:12px;font-weight:600;color:var(--gold-lt);flex-shrink:0;">02</div>
+        <div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--cream);margin-bottom:3px;">Análisis físico del documento</div>
+          <div style="font-size:11.5px;color:var(--text-2);line-height:1.55;">Inspección visual y táctil del documento físico: se identificaron enmiendas, borrones, alteración de cifras de volumen o especie, y discordancia entre el número de serie del documento y el registro oficial. En 8 de los 12 casos se detectaron correcciones manuales en el campo "volumen en m³".</div>
+        </div>
+      </div>
+
+      <!-- Paso 3 -->
+      <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(201,147,26,0.18);border:1px solid rgba(201,147,26,0.35);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:12px;font-weight:600;color:var(--gold-lt);flex-shrink:0;">03</div>
+        <div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--cream);margin-bottom:3px;">Contraste con el regente forestal emisor</div>
+          <div style="font-size:11.5px;color:var(--text-2);line-height:1.55;">Comunicación formal al regente forestal que suscribió la GRT para verificar la autenticidad de su firma y los datos consignados. La negativa o contradicción del regente constituyó prueba determinante. En 4 casos el regente declaró no haber emitido el documento, configurándose la infracción del Art. 130 inc. b) de la Ley N° 29763 con agravante de falsificación documental.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════ BOTTOM GRID ═══════ -->
+<div class="grid-bottom">
+
+  <!-- Expedientes detalle -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Expedientes en Trámite</span>
+      <span class="card-badge">5 activos</span>
+    </div>
+    <div id="timeline-panel"></div>
+  </div>
+
+  <!-- Marco normativo -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Marco Normativo Aplicado</span>
+      <span class="card-badge">Ley 29763</span>
+    </div>
+    <div id="normas-panel"></div>
+  </div>
+
+  <!-- Especies / Volumen por zona + tabla -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-title">Especies Forestales Decomisadas</span>
+      <span class="card-badge">CITES · IUCN</span>
+    </div>
+    <table class="esp-tbl">
+      <thead>
+        <tr>
+          <th>Especie</th>
+          <th>Categoría</th>
+          <th>Vol. m³</th>
+        </tr>
+      </thead>
+      <tbody id="esp-tbody"></tbody>
+    </table>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);">
+      <div style="font-family:'Fira Code',monospace;font-size:9.5px;color:var(--mist);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Volumen por distrito — m³</div>
+      <div id="bar-zona"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">SOFFS-PA · GORE Ucayali</div>
+  <div class="footer-meta">
+    Ley N° 29763 · D.S. 018-2015-MINAGRI · Ucayali, Perú · 2024
+  </div>
+  <div class="footer-meta" style="color:var(--leaf);">
+    Ing. Javier Carlos Vela · Sistema PAS Forestal
+  </div>
+</footer>
+
+</div><!-- shell -->
+
+<script>
+/* ══════════════════════════════════════════
+   DATOS
+══════════════════════════════════════════ */
+const D = {
+  mensual:  [8, 11, 7, 14, 12, 9, 16, 13, 10, 18, 15, 12],
+  meses:    ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+
+  estado: [
+    { label:'Instrucción', n:45, c:'#1a6ab5' },
+    { label:'Resolución',  n:23, c:'#3a7d44' },
+    { label:'Apelación',   n:12, c:'#d4620a' },
+    { label:'Archivado',   n:38, c:'#4a5c60' },
+  ],
+
+  tipos: [
+    { t:'Transporte sin GRT',           n:52, c:'#5cad6a' },
+    { t:'Extracción sin autorización',   n:31, c:'#1a6ab5' },
+    { t:'Acopio ilegal',                 n:23, c:'#d4620a' },
+    { t:'Adulteración de GRT',           n:12, c:'#c9931a' },
+  ],
+
+  expedientes: [
+    { cod:'SOFFS-PA-001-2024', nom:'Juan Carlos Flores Rios',      estado:'Resolución', art:'Art. 130',  uit:5.5,   ec:'#3a7d44' },
+    { cod:'SOFFS-PA-002-2024', nom:'Juan C. Flores Rios',          estado:'Instrucción',art:'Art. 128',  uit:null,  ec:'#1a6ab5' },
+    { cod:'SOFFS-PA-004-2024', nom:'Madereras del Oriente SAC',    estado:'Apelación',  art:'Art. 131',  uit:12.0,  ec:'#d4620a' },
+    { cod:'SOFFS-PA-005-2024', nom:'Pedro Huanca Mamani',          estado:'Instrucción',art:'Art. 130',  uit:null,  ec:'#1a6ab5' },
+    { cod:'SOFFS-PA-006-2024', nom:'Transportes Amazonia EIRL',    estado:'Resolución', art:'Art. 130',  uit:7.0,   ec:'#3a7d44' },
+  ],
+
+  normas: [
+    { art:'Art. 128', txt:'Extracción forestal sin título habilitante en áreas del patrimonio nacional', tip:'Muy Grave · Sanción máxima', nc:'#9b1c1c' },
+    { art:'Art. 130', txt:'Transporte de productos forestales sin documentación de origen legal (GRT)', tip:'Grave · Incluye adulteración de GRT', nc:'#d4620a' },
+    { art:'Art. 131', txt:'Acopio de madera o fauna silvestre sin acreditar origen legal de los productos', tip:'Grave-Muy Grave según volumen', nc:'#c9931a' },
+    { art:'Art. 145', txt:'Factores agravantes: reincidencia, daño ambiental, especies CITES', tip:'Incremento de hasta +50 % sobre sanción base', nc:'#5cad6a' },
+  ],
+
+  especies: [
+    { com:'Cedro',       sci:'Cedrela odorata',         cat:'App. III', vol:57.65, cc:'#ffe082', bg:'rgba(255,224,130,0.09)' },
+    { com:'Caoba',       sci:'Swietenia macrophylla',   cat:'App. II',  vol:17.05, cc:'#ef9a9a', bg:'rgba(239,154,154,0.09)' },
+    { com:'Shihuahuaco', sci:'Dipteryx micrantha',      cat:'EN',       vol:18.75, cc:'#ef9a9a', bg:'rgba(239,154,154,0.09)' },
+    { com:'Tornillo',    sci:'Cedrelinga cateniformis', cat:'VU',       vol:5.80,  cc:'#ffe082', bg:'rgba(255,224,130,0.07)' },
+    { com:'Cumala',      sci:'Virola surinamensis',     cat:'—',        vol:3.10,  cc:'#90a4ae', bg:'rgba(144,164,174,0.07)' },
+  ],
+
+  zonas: [
+    { z:'Alexander Von Humboldt', v:87.4, c:'#3a7d44' },
+    { z:'Padre Abad',             v:63.2, c:'#5cad6a' },
+    { z:'Curimana',               v:45.8, c:'#7dc485' },
+    { z:'Neshuya',                v:38.1, c:'#9ecba7' },
+    { z:'Boqueron',               v:29.7, c:'#c8e6c9' },
+    { z:'Irazola',                v:22.5, c:'#81c784' },
+    { z:'Huipoca',                v:18.3, c:'#a5d6a7' },
+  ],
+};
+
+/* ══════════════════════════════════════════
+   CONTADOR ANIMADO
+══════════════════════════════════════════ */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = +el.dataset.to;
+    const dur = 1500;
+    const start = performance.now();
+    const isLarge = target > 1000;
+    const tick = now => {
+      const p = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(ease * target);
+      el.textContent = isLarge ? val.toLocaleString('es-PE') : val;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    obs.unobserve(el);
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.counter').forEach(el => obs.observe(el));
+
+/* ══════════════════════════════════════════
+   SPARKLINE MENSUAL
+══════════════════════════════════════════ */
+(function () {
+  const vals = D.mensual;
+  const W = 720, H = 110, PX = 20, PY = 12;
+  const max = Math.max(...vals), min = 0;
+  const x = i => PX + (i / (vals.length - 1)) * (W - PX * 2);
+  const y = v => PY + (1 - v / (max + 2)) * (H - PY * 2);
+
+  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+  const linePts = 'M ' + pts.join(' L ');
+  const areaPts = `M ${x(0)},${H} L ${pts.join(' L ')} L ${x(vals.length - 1)},${H} Z`;
+
+  const svg = document.getElementById('spark-svg');
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="grad-s" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5cad6a" stop-opacity="0.38"/>
+        <stop offset="100%" stop-color="#5cad6a" stop-opacity="0.0"/>
+      </linearGradient>
+      <filter id="glow-f">
+        <feGaussianBlur stdDeviation="2.5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Grid horizontales -->
+    ${[20,40,60,80].map(pct => {
+      const yy = y(max * pct / 100);
+      return `<line x1="${PX}" y1="${yy.toFixed(1)}" x2="${W-PX}" y2="${yy.toFixed(1)}"
+        stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <text x="4" y="${(yy+3).toFixed(1)}" font-size="9" fill="rgba(255,255,255,0.55)"
+          font-family="Fira Code,monospace">${Math.round(max*pct/100)}</text>`;
+    }).join('')}
+    <!-- Área -->
+    <path id="s-area" d="${areaPts}" fill="url(#grad-s)" opacity="0"/>
+    <!-- Línea -->
+    <path id="s-line" d="${linePts}" fill="none" stroke="#5cad6a"
+      stroke-width="2.2" stroke-linejoin="round" filter="url(#glow-f)" opacity="0"/>
+  `;
+
+  // Puntos
+  vals.forEach((v, i) => {
+    const isPeak = v === max;
+    svg.innerHTML += `
+      <circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}"
+        r="${isPeak ? 5.5 : 3}" fill="${isPeak ? '#c9931a' : '#5cad6a'}"
+        stroke="${isPeak ? 'rgba(201,147,26,0.4)' : 'rgba(92,173,106,0.3)'}"
+        stroke-width="${isPeak ? 3 : 1.5}"
+        style="opacity:0;transition:opacity 0.3s ${0.5 + i * 0.07}s" class="sd"/>
+      ${isPeak ? `<text x="${x(i).toFixed(1)}" y="${(y(v)-10).toFixed(1)}"
+        text-anchor="middle" font-size="11" fill="#c9931a"
+        font-family="Fira Code,monospace" font-weight="500"
+        style="opacity:0;transition:opacity 0.3s ${0.6+i*0.07}s" class="sd">${v}</text>` : ''}
+    `;
+  });
+
+  // Etiquetas meses
+  const lblRow = document.getElementById('spark-labels');
+  D.meses.forEach(m => {
+    const s = document.createElement('span');
+    s.textContent = m;
+    lblRow.appendChild(s);
+  });
+
+  // Animación
+  setTimeout(() => {
+    const line = document.getElementById('s-line');
+    const len = line.getTotalLength();
+    line.style.strokeDasharray = len;
+    line.style.strokeDashoffset = len;
+    line.style.opacity = '1';
+    line.style.transition = `stroke-dashoffset 2s cubic-bezier(.16,1,.3,1)`;
+    line.style.strokeDashoffset = '0';
+    setTimeout(() => {
+      const a = document.getElementById('s-area');
+      a.style.transition = 'opacity 0.7s';
+      a.style.opacity = '1';
+    }, 1400);
+    document.querySelectorAll('.sd').forEach(d => d.style.opacity = '1');
+  }, 350);
+})();
+
+/* ══════════════════════════════════════════
+   DONA — ESTADO
+══════════════════════════════════════════ */
+(function () {
+  const data = D.estado;
+  const total = data.reduce((s, d) => s + d.n, 0);
+  const cx = 75, cy = 75, r = 56, thick = 18;
+  let offset = -Math.PI / 2;
+  let html = '';
+
+  data.forEach(d => {
+    const angle = (d.n / total) * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(offset);
+    const y1 = cy + r * Math.sin(offset);
+    const x2 = cx + r * Math.cos(offset + angle);
+    const y2 = cy + r * Math.sin(offset + angle);
+    const large = angle > Math.PI ? 1 : 0;
+    const path = `M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r},0,${large},1,${x2.toFixed(2)},${y2.toFixed(2)} Z`;
+    html += `<path d="${path}" fill="${d.c}" opacity="0.82"
+      style="transition:opacity .2s,filter .2s;cursor:pointer;"
+      onmouseover="this.style.opacity=1;this.style.filter='brightness(1.2)'"
+      onmouseout="this.style.opacity=.82;this.style.filter=''"/>`;
+    offset += angle;
+  });
+  html += `<circle cx="${cx}" cy="${cy}" r="${r - thick}" fill="rgba(11,28,16,0.96)"/>`;
+  document.getElementById('donut-svg').innerHTML = html;
+
+  // Counter
+  const el = document.getElementById('donut-n');
+  let c = 0;
+  const t = setInterval(() => {
+    c += 3; el.textContent = Math.min(c, total);
+    if (c >= total) clearInterval(t);
+  }, 16);
+
+  // Legend
+  const leg = document.getElementById('donut-legend');
+  leg.innerHTML = data.map(d => `
+    <div class="leg-item">
+      <div class="leg-dot" style="background:${d.c}"></div>
+      <span class="leg-name">${d.label}</span>
+      <span class="leg-n">${d.n}</span>
+      <span class="leg-pct">${((d.n / total) * 100).toFixed(0)}%</span>
+    </div>
+  `).join('');
+})();
+
+/* ══════════════════════════════════════════
+   BARRAS — TIPO INFRACCIÓN
+══════════════════════════════════════════ */
+(function () {
+  const max = Math.max(...D.tipos.map(t => t.n));
+  document.getElementById('bar-tipo').innerHTML =
+    D.tipos.map((t, i) => `
+      <div class="hbar-item">
+        <div class="hbar-meta">
+          <span class="hbar-name">${t.t}</span>
+          <span class="hbar-val">${t.n}</span>
+        </div>
+        <div class="hbar-track">
+          <div class="hbar-fill" style="width:${(t.n/max*100).toFixed(1)}%;
+            background:linear-gradient(90deg,${t.c},${t.c}80);
+            --d:${0.15 + i * 0.1}s;"></div>
+        </div>
+      </div>`).join('');
+})();
+
+/* ══════════════════════════════════════════
+   BARRAS — ZONA
+══════════════════════════════════════════ */
+(function () {
+  const max = Math.max(...D.zonas.map(z => z.v));
+  document.getElementById('bar-zona').innerHTML =
+    D.zonas.map((z, i) => `
+      <div class="hbar-item" style="margin-bottom:10px;">
+        <div class="hbar-meta">
+          <span class="hbar-name" style="font-size:12px;">${z.z}</span>
+          <span class="hbar-val" style="font-size:12px;">${z.v} m³</span>
+        </div>
+        <div class="hbar-track" style="height:5px;">
+          <div class="hbar-fill" style="width:${(z.v/max*100).toFixed(1)}%;
+            background:linear-gradient(90deg,${z.c},${z.c}88);
+            --d:${0.3 + i * 0.08}s;"></div>
+        </div>
+      </div>`).join('');
+})();
+
+/* ══════════════════════════════════════════
+   TIMELINE — EXPEDIENTES
+══════════════════════════════════════════ */
+(function () {
+  const stColor = { 'Resolución':'#3a7d44','Instrucción':'#1a6ab5','Apelación':'#d4620a' };
+  document.getElementById('timeline-panel').innerHTML =
+    D.expedientes.map((e, i) => `
+      <div class="tl-item">
+        <div class="tl-num" style="background:${e.ec}18;
+          border-color:${e.ec}44;color:${e.ec};">
+          ${String(i + 1).padStart(2, '0')}
+        </div>
+        <div>
+          <div class="tl-code">EXP-${e.cod}</div>
+          <div class="tl-name">${e.nom}</div>
+          <div class="tl-chips">
+            <span class="chip" style="background:${stColor[e.estado]||'#4a5c60'}18;
+              border-color:${stColor[e.estado]||'#4a5c60'}44;
+              color:${stColor[e.estado]||'#90a4ae'};">
+              ${e.estado}
+            </span>
+            <span class="chip" style="background:rgba(201,147,26,0.1);
+              border-color:rgba(201,147,26,0.2);color:#c9931a;">
+              ${e.art}
+            </span>
+            ${e.uit ? `<span style="font-family:'Fira Code',monospace;font-size:11px;
+              color:#e8b84b;font-weight:600;">${e.uit} UIT</span>` :
+              `<span style="font-family:'Fira Code',monospace;font-size:11px;
+              color:#9dbfa6;">Pendiente</span>`}
+          </div>
+        </div>
+      </div>`).join('');
+})();
+
+/* ══════════════════════════════════════════
+   NORMAS
+══════════════════════════════════════════ */
+(function () {
+  document.getElementById('normas-panel').innerHTML =
+    D.normas.map(n => `
+      <div class="norma" style="background:${n.nc}0e;--nc:${n.nc};">
+        <div class="norma-art">${n.art} · Ley N° 29763</div>
+        <div class="norma-body">${n.txt}</div>
+        <div class="norma-foot">${n.tip}</div>
+      </div>`).join('');
+})();
+
+/* ══════════════════════════════════════════
+   TABLA ESPECIES
+══════════════════════════════════════════ */
+(function () {
+  const maxV = Math.max(...D.especies.map(e => e.vol));
+  const catBg = {
+    'App. II' :'rgba(239,154,154,0.18)',
+    'App. III':'rgba(255,224,130,0.15)',
+    'VU'      :'rgba(255,224,130,0.15)',
+    'EN'      :'rgba(239,154,154,0.18)',
+    '—'       :'rgba(144,164,174,0.12)',
+  };
+  document.getElementById('esp-tbody').innerHTML =
+    D.especies.map((e, i) => `
+      <tr>
+        <td style="background:${e.bg}">
+          <div style="font-weight:500;">${e.com}</div>
+          <div class="sp-sci">${e.sci}</div>
+        </td>
+        <td>
+          <span class="cites"
+            style="background:${catBg[e.cat]||'rgba(144,164,174,0.12)'};
+            color:${e.cc};">
+            ${e.cat}
+          </span>
+        </td>
+        <td>
+          <span style="font-family:'Fira Code',monospace;font-size:12px;
+            color:${e.cc};">${e.vol}</span>
+          <div class="mini-bar"
+            style="width:${(e.vol/maxV*100).toFixed(0)}%;
+            background:${e.cc};
+            --d:${0.4 + i * 0.1}s;"></div>
+        </td>
+      </tr>`).join('');
+})();
+</script>
+</body>
+</html>
