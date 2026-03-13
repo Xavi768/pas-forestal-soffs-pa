@@ -2,92 +2,146 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAS Forestal — SOFFS-PA Padre Abad 2024</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard PAS Forestal — ATF Aguaytía 2026</title>
+<meta property="og:title" content="Dashboard PAS Forestal ATF Aguaytía 2026">
+<meta property="og:description" content="8 Informes Técnicos PAS — SOFFS-PA Padre Abad, Ucayali">
 <style>
-:root{
-  --ink:#0b1c10;--forest:#245c2e;--moss:#3a7d44;--leaf:#5cad6a;
-  --mist:#9ecba7;--fog:#d0e8d4;--cream:#f4f0e6;--gold:#c9931a;
-  --gold-lt:#e8b84b;--text:#eef4ef;--text2:#c2d6c7;--text3:#9dbfa6;
-  --line:rgba(200,230,205,0.12);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 15% 20%,rgba(36,92,46,0.22) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 85% 80%,rgba(201,147,26,0.07) 0%,transparent 50%);pointer-events:none;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#F0F7F1;color:#1E293B}
+.header{background:linear-gradient(135deg,#0D4A1E 0%,#1B7A34 100%);color:#fff;padding:28px 20px 22px;position:relative;overflow:hidden;border-bottom:5px solid #F4831F}
+.header::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:#F4831F}
+.inst{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A8D5B5;margin-bottom:10px;padding-left:4px}
+.header h1{font-size:clamp(24px,6vw,38px);font-weight:900;line-height:1.1;margin-bottom:6px;padding-left:4px}
+.header h1 span{color:#EAB308}
+.header .sub{font-size:12px;color:#C8DFCB;line-height:1.6;padding-left:4px;margin-bottom:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;padding-left:4px}
+.badge{padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700}
+.b1{background:#F4831F;color:#fff}
+.b2{background:#0891B2;color:#fff}
+.b3{background:rgba(255,255,255,.15);color:#A8D5B5;border:1px solid #A8D5B5}
 
-.card{position:relative;z-index:1;max-width:560px;width:100%;background:rgba(255,255,255,0.028);border:1px solid var(--line);border-radius:20px;padding:40px 36px 36px;text-align:center;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forest),var(--gold),var(--leaf));border-radius:20px 20px 0 0;}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 14px;background:#fff;border-bottom:3px solid #EAB308}
+.kpi{text-align:center;padding:14px 6px;border-radius:10px;background:#F8FAFC;border-top:4px solid var(--c);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.kpi .n{font-size:clamp(22px,5vw,32px);font-weight:900;color:var(--c);line-height:1}
+.kpi .l{font-size:10px;color:#64748B;margin-top:4px;line-height:1.3}
 
-.eyebrow{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--leaf);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:10px;}
-.eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--leaf);}
+.wrap{padding:16px 14px;max-width:700px;margin:0 auto}
 
-.title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,42px);font-weight:700;color:var(--cream);line-height:1.08;letter-spacing:-0.5px;margin-bottom:8px;}
-.title em{color:var(--gold-lt);font-style:italic;display:block;}
+.dl-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 18px rgba(0,0,0,.10);margin-bottom:18px;border-left:5px solid #1B7A34}
+.dl-card h2{font-size:14px;color:#1B7A34;font-weight:800;margin-bottom:6px}
+.dl-card p{font-size:12px;color:#64748B;margin-bottom:14px;line-height:1.5}
+.btn-dl{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:#1B7A34;color:#fff;text-decoration:none;border-radius:10px;font-size:15px;font-weight:800;box-shadow:0 4px 14px rgba(27,122,52,.35);margin-bottom:10px}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;background:#25D366;color:#fff;text-decoration:none;border-radius:10px;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(37,211,102,.30)}
 
-.subtitle{font-size:13.5px;color:var(--text3);line-height:1.6;margin-bottom:32px;}
+.card{background:#fff;border-radius:14px;padding:18px 14px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px}
+.card h3{font-size:13px;font-weight:800;color:#0891B2;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #E0F7FA}
+.ft{width:100%;border-collapse:collapse}
+.ft tr:nth-child(even) td{background:#F0F7F1}
+.ft td{padding:7px 8px;font-size:11.5px;vertical-align:top;border-bottom:1px solid #E2E8F0}
+.ft td:first-child{font-weight:700;color:#1B7A34;width:36%}
+.mg{background:#FEE2E2!important;color:#DC2626;font-weight:700;padding:3px 10px;border-radius:20px;font-size:10px;display:inline-block}
 
-.links{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;}
-.link-btn{
-  display:flex;align-items:center;gap:16px;
-  background:rgba(255,255,255,0.04);border:1px solid var(--line);
-  border-radius:14px;padding:18px 20px;text-decoration:none;
-  transition:all 0.25s;text-align:left;
-}
-.link-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(200,230,205,0.28);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.3);}
-.link-icon{font-size:26px;flex-shrink:0;}
-.link-info{}
-.link-name{font-size:15px;font-weight:600;color:var(--cream);margin-bottom:3px;}
-.link-desc{font-size:12px;color:var(--text3);}
-.link-arrow{margin-left:auto;font-size:18px;color:var(--leaf);opacity:0.6;transition:transform 0.2s;}
-.link-btn:hover .link-arrow{transform:translateX(4px);opacity:1;}
+.slides{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sl{background:#fff;border-radius:10px;padding:13px 11px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--c)}
+.sl .sn{font-size:20px;font-weight:900;color:var(--c);line-height:1}
+.sl .st{font-size:11px;font-weight:700;margin-top:3px;line-height:1.3}
+.sl .sd{font-size:10px;color:#64748B;margin-top:3px;line-height:1.4}
 
-.divider{height:1px;background:var(--line);margin:4px 0 20px;}
+.qr-section{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.qr-card{background:#fff;border-radius:14px;padding:16px 12px;box-shadow:0 2px 12px rgba(0,0,0,.08);text-align:center;border-top:5px solid var(--c)}
+.qr-card .ql{font-size:11px;font-weight:800;color:var(--c);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.qr-card img{width:min(160px,40vw);height:auto;border:3px solid var(--c);border-radius:10px;padding:4px;margin:0 auto 8px;display:block}
+.qr-card .qd{font-size:9.5px;color:#64748B;line-height:1.4}
 
-.footer-info{font-family:'Fira Code',monospace;font-size:10px;color:var(--text3);letter-spacing:1px;line-height:1.8;}
-.footer-info strong{color:var(--leaf);}
-
-.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:pulse 2s ease infinite;vertical-align:middle;margin-right:6px;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(92,173,106,0.5);}50%{box-shadow:0 0 0 6px rgba(92,173,94,0);}}
+.footer{background:#0D4A1E;color:#A8D5B5;text-align:center;padding:18px 14px;font-size:11px;line-height:1.7}
+.footer a{color:#EAB308;text-decoration:none}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="eyebrow">SOFFS-PA · GORE Ucayali · 2024</div>
-  <h1 class="title">
-    Gestión Integral PAS
-    <em>Forestal y Fauna Silvestre</em>
-  </h1>
-  <p class="subtitle">
-    Sistema de Fiscalización Forestal — Provincia de Padre Abad<br>
-    Ley N° 29763 · D.S. 018-2015-MINAGRI
-  </p>
 
-  <div class="links">
-    <a class="link-btn" href="Dashboard_PAS_Exposicion_JCV.html">
-      <div class="link-icon">📊</div>
-      <div class="link-info">
-        <div class="link-name">Dashboard Interactivo</div>
-        <div class="link-desc">Gráficos, estadísticas, análisis normativo y casuística 2024</div>
-      </div>
-      <div class="link-arrow">→</div>
-    </a>
-    <a class="link-btn" href="Agente_Expositor_PAS_Forestal.html">
-      <div class="link-icon">🎙</div>
-      <div class="link-info">
-        <div class="link-name">Agente Expositor con Voz</div>
-        <div class="link-desc">Presentación automática narrada · 11 secciones · Compatible móvil</div>
-      </div>
-      <div class="link-arrow">→</div>
-    </a>
-  </div>
-
-  <div class="divider"></div>
-  <div class="footer-info">
-    <span class="dot"></span><strong>Ing. Javier Carlos Vela</strong> · Especialista Forestal PAS<br>
-    Sub Oficina de Funciones Forestales y de Fauna Silvestre — Padre Abad<br>
-    Gobierno Regional de Ucayali
+<div class="header">
+  <div class="inst">🌿 Gobierno Regional de Ucayali — GRFFS — SOFFS-PA — Padre Abad</div>
+  <h1>Dashboard PAS <span>Forestal</span><br>ATF Aguaytía <span>2026</span></h1>
+  <div class="sub">Procedimiento Administrativo Sancionador Forestal<br>
+  Ing. Javier Carlos Vela (CIP 180398) · Ing. Cubillas Romero Ramírez</div>
+  <div class="badges">
+    <span class="badge b1">08 Informes Técnicos</span>
+    <span class="badge b2">Enero–Marzo 2026</span>
+    <span class="badge b3">10 Diapositivas</span>
+    <span class="badge b1">100% MUY GRAVE</span>
   </div>
 </div>
+
+<div class="kpis">
+  <div class="kpi" style="--c:#F4831F"><div class="n">08</div><div class="l">Informes<br>Técnicos PAS</div></div>
+  <div class="kpi" style="--c:#DC2626"><div class="n">05</div><div class="l">Informes<br>Inicio PAS</div></div>
+  <div class="kpi" style="--c:#1B7A34"><div class="n">100%</div><div class="l">Infracciones<br>MUY GRAVE</div></div>
+  <div class="kpi" style="--c:#0891B2"><div class="n">7+</div><div class="l">Administrados<br>Imputados</div></div>
+  <div class="kpi" style="--c:#7C3AED"><div class="n">18.30</div><div class="l">ha Máx.<br>Deforestadas</div></div>
+  <div class="kpi" style="--c:#1D4ED8"><div class="n">S/22k+</div><div class="l">Valor ilícito<br>total</div></div>
+</div>
+
+<div class="wrap">
+
+  <div class="dl-card">
+    <h2>📥 Descargar Dashboard Completo — 10 Diapositivas</h2>
+    <p>Presentación PowerPoint con fichas completas, tablas, gráficos y análisis jurídico de los 8 informes técnicos PAS: IT N° 001 al 006 + 2 Informes Finales Instructivos.</p>
+    <a class="btn-dl" href="https://github.com/Xavi768/pas-forestal-soffs-pa/raw/main/Dashboard_ATF_Aguaytia_PAS_2026_v10_NETLIFY_FINAL.pptx">📊 Descargar PPTX (10 diapositivas)</a>
+    <a class="btn-wa" href="https://wa.me/?text=%F0%9F%93%8A%20DASHBOARD%20PAS%20FORESTAL%20ATF%20Aguayt%C3%ADa%202026%0A%F0%9F%8C%BF%20SOFFS-PA%20Padre%20Abad%20%E2%80%94%208%20Informes%20T%C3%A9cnicos%0A%F0%9F%94%97%20Ver%20y%20descargar%3A%20https%3A%2F%2Fxavi768.github.io%2Fpas-forestal-soffs-pa%2F">📲 Compartir por WhatsApp</a>
+  </div>
+
+  <div class="qr-section">
+    <div class="qr-card" style="--c:#1B7A34">
+      <div class="ql">🌐 Portal Web</div>
+      <img src="data:image/png;base64,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d598YqyZp+4+ectYM9/u7pO3jDXD++4++Y0qAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBorwIAtPeTX2ysmbfcffKWsWaeuvvk240189TdJ28Za+bb3X3y1Fgzn7j75C13n7xlrJmn7j75dnefPDXWzFvuPvl2Y808dffJWyoAQHsVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7FQCgvQoA0F4FAGjvJy8ba+apu0/ecvfJJ8aaeeruk0/cffLUWDOfuPvkm40185a7T77dWDO/0VgzT9198om7T54aa+YTd588NdbMJ8aaecvdJ0+NNfOWu09+owoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBorwIAtFcBANqrAADt/eRld5/w74w189TdJ58Ya+apu08+cffJU2PNvGWsmU/cffLUWDO/0d0nnxhr5i1jzTx198knxpp56u6TT4w185axZp66++QTY8285e6Tb1YBANqrAADtVQCA9ioAQHsVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7P3nZWDNP3X3ylrFmvt3dJ/w7d5+8ZayZt9x98tRYM58Ya+apu0++3d0nT40185axZj5x98lTY828ZayZt4w184m7T75ZBQBorwIAtFcBANqrAADtVQCA9ioAQHsVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPZ+0sBYM2+5++TbjTXzlrtPnhpr5hN3n3yzsWY+cffJW8aaeeruk7eMNfOWsWbecvcJ/x13nzw11sxvVAEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBorwIAtFcBANqrAADtVQCA9ioAQHt//PmXvGismafuPvnEWDNP3X3yibFmnrr75Dcaa4b/jrtP3jLWzFN3n/xGY8184u6Tt4w189TdJ28Za+Ytd598YqyZp+4+eUsFAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBorwIAtFcBANqrAADtVQCA9v748y950VgzT9198u3Gmvlmd598YqyZp+4+ectYM5+4++SpsWY+cffJU2PNvOXuk2831sxb7j75ZmPNfOLuk6fGmvnE3SdPjTXz7e4++WYVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7FQCgvQoA0F4FAGivAgC09xP+a+4+ectYM28Za+YTd5/w79x98paxZp66++QTd588NdbMJ8aaeeruk0+MNfPU3SefGGvmqbtPPjHWzDe7++Q3qgAA7VUAgPYqAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANDeT/ivGWvmLXefvGWsmU+MNfPU3Sdvufvk240185a7T77Z3SefGGvmm40185axZr7d3SdPjTXzlrtP3lIBANqrAADtVQCA9ioAQHsVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7P3nZ3Se/0d0nv9FYM2+5++QtY818s7tPvt1YM2+5++SpsWY+cffJU2PNvOXuk2831sxTd598YqwZ/lYBANqrAADtVQCA9ioAQHsVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7FQCgvZ+8bKwZ3nf3ySfuPuFvd5+8ZayZt9x98pa7T/jvGGvmqbtPfqO7T36jCgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7FQCgvQoA0F4FAGivAgC0VwEA2vtJA3ef8I+xZt4y1sxvdPfJW8aa+Y3uPnlqrJlvN9bMb3T3yTcba+bbjTXz1N0nb6kAAO1VAID2KgBAexUAoL0KANBeBQBorwIAtFcBANqrAADtVQCA9ioAQHsVAKC9CgDQ3k9+sbFmvtndJ7/R3SefGGvmLWPNfLO7T77dWDNvufvkqbFmPnH3yVvGmnlqrBn+cffJU2PNfOLuk29WAQDaqwAA7VUAgPYqAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAez+BL3H3yVNjzbzl7pNPjDXz1Fgzb7n75BN3n7xlrJmn7j75xFgzv9HdJ28Za+YtY808dffJJ8aaeeruk7dUAID2KgBAexUAoL0KANBeBQBorwIAtFcBANqrAADtVQCA9ioAQHsVAKC9CgDQXgUAaO8nwP+XsWY+cffJbzTWzFvuPuFvd598YqyZt9x98paxZt5y98k3qwAA7VUAgPYqAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL2f/GJ3n/Dv3H3ylrFmnrr7hH+MNfPU3SefuPvkqbFmPjHWzDe7++QtY8285e6TT4w1w/sqAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBorwIAtPfHn3/Ji8aa4X13n3xirJmn7j7hH2PNPHX3yVvGmvl2d5+8ZayZb3b3ySfGmnnL3SffbKyZT9x98s0qAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBo748//xIAoLUKANBeBQBorwIAtFcBANqrAADtVQCA9ioAQHsVAKC9CgDQXgUAaK8CALRXAQDaqwAA7VUAgPYqAEB7FQCgvQoA0F4FAGivAgC0VwEA2qsAAO1VAID2KgBAexUAoL0KANBeBQBo738A8vkQknrP8T8AAAAASUVORK5CYII=" alt="QR Portal">
+      <div class="qd">Escanea para abrir este portal en tu celular</div>
+    </div>
+    <div class="qr-card" style="--c:#25D366">
+      <div class="ql">📲 WhatsApp</div>
+      <img src="data:image/png;base64,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" alt="QR WhatsApp">
+      <div class="qd">Escanea para compartir por WhatsApp</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Contenido — 10 Diapositivas</h3>
+    <div class="slides">
+      <div class="sl" style="--c:#1B7A34"><div class="sn">1</div><div class="st">Portada Ejecutiva</div><div class="sd">8 KPIs · QR · Autores</div></div>
+      <div class="sl" style="--c:#F4831F"><div class="sn">2</div><div class="st">IT N°001 — DECOMADERA</div><div class="sd">8 trozas · 7.997 m³ · Num.22</div></div>
+      <div class="sl" style="--c:#0891B2"><div class="sn">3</div><div class="st">IT N°006 — El Tornillal</div><div class="sd">14 árboles Tornillo · Ítems 19+21</div></div>
+      <div class="sl" style="--c:#1B7A34"><div class="sn">4</div><div class="st">IFI N°001 — Final</div><div class="sd">Multa 0.4790 UIT · Gradualidad</div></div>
+      <div class="sl" style="--c:#1D4ED8"><div class="sn">5</div><div class="st">Marco Normativo</div><div class="sd">Comparativo · Principios PAS</div></div>
+      <div class="sl" style="--c:#7C3AED"><div class="sn">6</div><div class="st">Conclusiones y QR</div><div class="sd">6 conclusiones · Recomendaciones</div></div>
+      <div class="sl" style="--c:#7C3AED"><div class="sn">7</div><div class="st">IT N°002 — La Punta</div><div class="sd">15 árboles · 8.213 m³ · 7.09 ha</div></div>
+      <div class="sl" style="--c:#DC2626"><div class="sn">8</div><div class="st">IT N°003 — Mapuya</div><div class="sd">17 árboles · 21.747 m³ · CITES</div></div>
+      <div class="sl" style="--c:#0891B2"><div class="sn">9</div><div class="st">IT N°004+005</div><div class="sd">Maverick + Trujillo/Vásquez</div></div>
+      <div class="sl" style="--c:#1D4ED8"><div class="sn">10</div><div class="st">IFI N°002 — Rivadeneyra</div><div class="sd">Multa 0.5274 UIT · Dolo directo</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📂 Expedientes PAS — Resumen</h3>
+    <table class="ft">
+      <tr><td>IT N°001 — Inicio PAS</td><td>Joel Mike Duran Jorge — DECOMADERA DURAN G&R E.I.R.L. — 7.997 m³ Num.22</td></tr>
+      <tr><td>IT N°002 — Inicio PAS</td><td>Emilia Tarazona Maíz — Caserío La Punta — 8.213 m³ / 15 árboles / Ítem 21</td></tr>
+      <tr><td>IT N°003 — Inicio PAS</td><td>Herma Hoyler y otros — Caserío Mapuya — 21.747 m³ / 18.30 ha / CITES</td></tr>
+      <tr><td>IT N°004 — Inicio PAS</td><td>Ángel Quintanilla Mayer — CTP Maverick — 6.43 m³ Lupuna NT / Num.22</td></tr>
+      <tr><td>IT N°005 — Inicio PAS</td><td>Trujillo Cachique + Vásquez Trujillo — 17.393 m³ / 25 árboles / Ítem 21</td></tr>
+      <tr><td>IT N°006 — Complementario</td><td>Joel Grández Chávez — El Tornillal — 15.248 m³ Tornillo / Ítems 19+21</td></tr>
+      <tr><td>IFI N°001 — Final</td><td>DECOMADERA DURAN — Multa propuesta: <strong>0.4790 UIT = S/ 2,634.24</strong></td></tr>
+      <tr><td>IFI N°002 — Final</td><td>Robinson Rivadeneyra Reátegui — Multa propuesta: <strong>0.5274 UIT = S/ 2,900.70</strong></td></tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>SOFFS-PA — Sede Operativa Forestal y de Fauna Silvestre de Padre Abad</strong><br>
+  Gerencia Regional Forestal y de Fauna Silvestre — Gobierno Regional de Ucayali<br>
+  Ing. Javier Carlos Vela (CIP 180398) · Ing. Cubillas Romero Ramírez · Director SOFFS-PA<br>
+  <a href="https://xavi768.github.io/pas-forestal-soffs-pa/">https://xavi768.github.io/pas-forestal-soffs-pa/</a> · Año de la Esperanza y el Fortalecimiento de la Democracia · 2026
+</div>
+
 </body>
 </html>
